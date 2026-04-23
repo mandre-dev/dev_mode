@@ -45,15 +45,33 @@ root.configure(bg="#101820")
 center_frame = tk.Frame(root, bg="#101820")
 center_frame.pack(expand=True)
 
-# Título centralizado
-label_title = tk.Label(
-    center_frame,
-    text="Dev_Mode",
+# Título centralizado com cores separadas: Dev (azul), _ (branco), Mode (amarelo)
+title_frame = tk.Frame(center_frame, bg="#101820")
+title_frame.pack(pady=(20, 10))
+
+tk.Label(
+    title_frame,
+    text="Dev",
     font=("Arial", 18, "bold"),
     fg="#00AEEF",
     bg="#101820",
-)
-label_title.pack(pady=(20, 10))
+).pack(side="left")
+
+tk.Label(
+    title_frame,
+    text="_",
+    font=("Arial", 18, "bold"),
+    fg="#FFFFFF",
+    bg="#101820",
+).pack(side="left")
+
+tk.Label(
+    title_frame,
+    text="Mode",
+    font=("Arial", 18, "bold"),
+    fg="#FFD700",
+    bg="#101820",
+).pack(side="left")
 
 
 # Label 'Preset:' à esquerda da lista
@@ -157,19 +175,45 @@ except Exception:
 btn_delete.pack(side="left", padx=(10, 0))
 ToolTip(btn_delete, "Excluir")
 
-# Botão Apply abaixo da lista suspensa
-btn_apply = tk.Button(
+# Botão Apply customizado com texto amarelo e sombreamento
+apply_canvas = tk.Canvas(
     center_frame,
-    text="Apply",
-    font=("Arial", 12, "bold"),
-    fg="#101820",
+    width=100,
+    height=36,
     bg="#00AEEF",
-    bd=0,
-    activebackground="#008BC7",
-    activeforeground="#101820",
-    padx=20,
-    pady=5,
+    highlightthickness=0,
+    cursor="hand2",
 )
-btn_apply.pack(pady=(10, 0))
+apply_canvas.pack(pady=(10, 0))
+# Sombra do texto (deslocada 1px para baixo/direita)
+apply_canvas.create_text(
+    51, 19, text="Apply", font=("Arial", 12, "bold"), fill="#B8860B"
+)
+# Texto principal em amarelo
+apply_canvas.create_text(
+    50, 18, text="Apply", font=("Arial", 12, "bold"), fill="#FFD700"
+)
+
+
+def on_apply_enter(event):
+    apply_canvas.config(bg="#008BC7")
+    apply_canvas.itemconfig(1, fill="#8B6914")
+    apply_canvas.itemconfig(2, fill="#FFE135")
+
+
+def on_apply_leave(event):
+    apply_canvas.config(bg="#00AEEF")
+    apply_canvas.itemconfig(1, fill="#B8860B")
+    apply_canvas.itemconfig(2, fill="#FFD700")
+
+
+def on_apply_click(event):
+    # Ação do botão Apply aqui
+    pass
+
+
+apply_canvas.bind("<Enter>", on_apply_enter)
+apply_canvas.bind("<Leave>", on_apply_leave)
+apply_canvas.bind("<Button-1>", on_apply_click)
 
 root.mainloop()
