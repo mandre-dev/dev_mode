@@ -23,6 +23,19 @@ def save_presets(presets):
         json.dump(presets, f, ensure_ascii=False, indent=2)
 
 
+# Função para excluir o preset selecionado no combobox
+def delete_preset():
+    selected = combo.get()
+    if not selected:
+        return
+    presets = load_presets()
+    presets = [p for p in presets if p.get("name") != selected]
+    save_presets(presets)
+    # Atualiza a lista suspensa
+    combo.config(values=[p["name"] for p in presets])
+    combo.set("")
+
+
 import tkinter as tk
 
 
@@ -110,9 +123,21 @@ label_preset = tk.Label(
 )
 label_preset.pack(side="left", padx=(0, 10))
 
-# Lista suspensa (Combobox) vazia
+
+# Carrega nomes dos presets salvos ao iniciar
+def get_saved_preset_names():
+    try:
+        return [p["name"] for p in load_presets()]
+    except Exception:
+        return []
+
+
 combo = ttk.Combobox(
-    row_frame, values=[], state="readonly", font=("Arial", 12), width=18
+    row_frame,
+    values=get_saved_preset_names(),
+    state="readonly",
+    font=("Arial", 12),
+    width=18,
 )
 combo.set("")
 combo.pack(side="left")
@@ -186,17 +211,12 @@ def show_preset_name_input():
     )
     label.pack(side="left", padx=(0, 10))
 
-
     entry = tk.Entry(frame, font=("Arial", 12), width=18, bg="#FFFFFF")
     entry.pack(side="left")
 
     # Label de aviso (inicialmente oculto)
     warning_label = tk.Label(
-        center_frame,
-        text="",
-        font=("Arial", 10, "bold"),
-        fg="#FFD700",
-        bg="#101820"
+        center_frame, text="", font=("Arial", 10, "bold"), fg="#FFD700", bg="#101820"
     )
     warning_label.pack()
 
@@ -262,13 +282,146 @@ def show_preset_name_input():
             return
         warning_label.config(text="")
         presets = load_presets()
-        # Salva como dicionário para permitir mais campos no futuro
         preset_obj = {"name": name, "ide": ide}
         if not any(p.get("name") == name for p in presets):
             presets.append(preset_obj)
             save_presets(presets)
         entry.delete(0, tk.END)
         entry.config(bg="#D2FFD2")
+
+        # Atualiza a lista suspensa na tela inicial
+        for widget in center_frame.winfo_children():
+            if widget != title_frame:
+                widget.destroy()
+        # Recria o row_frame e widgets principais com a lista atualizada
+        row_frame = tk.Frame(center_frame, bg="#101820")
+        row_frame.pack(pady=20)
+        label_preset = tk.Label(
+            row_frame, text="Preset:", font=("Arial", 12), fg="#00AEEF", bg="#101820"
+        )
+        label_preset.pack(side="left", padx=(0, 10))
+        # Carrega nomes dos presets salvos
+        preset_names = [p["name"] for p in load_presets()]
+        combo = ttk.Combobox(
+            row_frame,
+            values=preset_names,
+            state="readonly",
+            font=("Arial", 12),
+            width=18,
+        )
+        combo.set("")
+        combo.pack(side="left")
+        try:
+            pencil_icon = PhotoImage(file="editar.png")
+            factor = max(1, pencil_icon.width() // 20)
+            if factor > 1:
+                pencil_icon = pencil_icon.subsample(factor, factor)
+            btn_edit = tk.Button(
+                row_frame,
+                image=pencil_icon,
+                bg="#101820",
+                bd=0,
+                activebackground="#101820",
+            )
+            btn_edit.image = pencil_icon
+        except Exception:
+            btn_edit = tk.Button(
+                row_frame,
+                text="Editar",
+                bg="#101820",
+                fg="#00AEEF",
+                bd=0,
+                activebackground="#101820",
+            )
+        btn_edit.pack(side="left", padx=(10, 0))
+        ToolTip(btn_edit, "Editar")
+        try:
+            add_icon = PhotoImage(file="adicionar.png")
+            factor_add = max(1, add_icon.width() // 20)
+            if factor_add > 1:
+                add_icon = add_icon.subsample(factor_add, factor_add)
+            btn_add = tk.Button(
+                row_frame,
+                image=add_icon,
+                bg="#101820",
+                bd=0,
+                activebackground="#101820",
+                command=show_preset_name_input,
+            )
+            btn_add.image = add_icon
+        except Exception:
+            btn_add = tk.Button(
+                row_frame,
+                text="Adicionar",
+                bg="#101820",
+                fg="#00AEEF",
+                bd=0,
+                activebackground="#101820",
+                command=show_preset_name_input,
+            )
+        btn_add.pack(side="left", padx=(10, 0))
+        ToolTip(btn_add, "Adicionar")
+        try:
+            delete_icon = PhotoImage(file="excluir.png")
+            factor_del = max(1, delete_icon.width() // 20)
+            if factor_del > 1:
+                delete_icon = delete_icon.subsample(factor_del, factor_del)
+            btn_delete = tk.Button(
+                row_frame,
+                image=delete_icon,
+                bg="#101820",
+                bd=0,
+                activebackground="#101820",
+                command=delete_preset,
+            )
+            btn_delete.image = delete_icon
+        except Exception:
+            btn_delete = tk.Button(
+                row_frame,
+                text="Excluir",
+                bg="#101820",
+                fg="#00AEEF",
+                bd=0,
+                activebackground="#101820",
+                command=delete_preset,
+            )
+        btn_delete.pack(side="left", padx=(10, 0))
+        ToolTip(btn_delete, "Excluir")
+
+        # Botão Apply customizado com texto amarelo e sombreamento
+        apply_canvas = tk.Canvas(
+            center_frame,
+            width=100,
+            height=36,
+            bg="#00AEEF",
+            highlightthickness=0,
+            cursor="hand2",
+        )
+        apply_canvas.pack(pady=(10, 0))
+        apply_canvas.create_text(
+            51, 19, text="Apply", font=("Arial", 12, "bold"), fill="#B8860B"
+        )
+        apply_canvas.create_text(
+            50, 18, text="Apply", font=("Arial", 12, "bold"), fill="#FFD700"
+        )
+
+        def on_apply_enter(event):
+            apply_canvas.config(bg="#008BC7")
+            apply_canvas.itemconfig(1, fill="#8B6914")
+            apply_canvas.itemconfig(2, fill="#FFE135")
+
+        def on_apply_leave(event):
+            apply_canvas.config(bg="#00AEEF")
+            apply_canvas.itemconfig(1, fill="#B8860B")
+            apply_canvas.itemconfig(2, fill="#FFD700")
+
+        def on_apply_click(event):
+            # Ação do botão Apply aqui
+            pass
+
+        apply_canvas.bind("<Enter>", on_apply_enter)
+        apply_canvas.bind("<Leave>", on_apply_leave)
+        apply_canvas.bind("<Button-1>", on_apply_click)
 
     # Frame para os botões de ação
     btns_frame = tk.Frame(center_frame, bg="#101820")
@@ -408,6 +561,7 @@ def show_preset_name_input():
                 bg="#101820",
                 bd=0,
                 activebackground="#101820",
+                command=delete_preset,
             )
             btn_delete.image = delete_icon
         except Exception:
@@ -418,6 +572,7 @@ def show_preset_name_input():
                 fg="#00AEEF",
                 bd=0,
                 activebackground="#101820",
+                command=delete_preset,
             )
         btn_delete.pack(side="left", padx=(10, 0))
         ToolTip(btn_delete, "Excluir")
@@ -513,6 +668,7 @@ try:
         bg="#101820",
         bd=0,
         activebackground="#101820",
+        command=delete_preset,
     )
     btn_delete.image = delete_icon  # manter referência
 except Exception:
@@ -523,6 +679,7 @@ except Exception:
         fg="#00AEEF",
         bd=0,
         activebackground="#101820",
+        command=delete_preset,
     )
 btn_delete.pack(side="left", padx=(10, 0))
 ToolTip(btn_delete, "Excluir")
