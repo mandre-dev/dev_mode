@@ -5,6 +5,9 @@ import os
 # Caminho do arquivo de presets
 PRESETS_FILE = os.path.join(os.path.expanduser("~"), ".dev_mode_presets.json")
 
+# Referência global ao combobox atual (atualizado quando a UI é recriada)
+combo = None
+
 
 # Função para carregar presets
 def load_presets():
@@ -25,6 +28,9 @@ def save_presets(presets):
 
 # Função para excluir o preset selecionado no combobox
 def delete_preset():
+    global combo
+    if combo is None:
+        return
     selected = combo.get()
     if not selected:
         return
@@ -274,6 +280,7 @@ def show_preset_name_input():
     ide_combo.pack(side="left")
 
     def save_preset():
+        global combo
         name = entry.get().strip()
         ide = ide_var.get()
         if not name:
@@ -484,6 +491,7 @@ def show_preset_name_input():
     clean_btn.pack(side="left", padx=(0, 8))
 
     def cancel_action():
+        global combo
         # Limpa e volta para tela inicial (recarrega a interface principal)
         for widget in center_frame.winfo_children():
             if widget != title_frame:
