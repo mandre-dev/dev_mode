@@ -197,8 +197,8 @@ class DevModeApp:
             bg=colors["bg"],
         ).pack(side="left", padx=(0, 10))
 
-        ides_list = detect_ides()
-        ide_var = tk.StringVar(value=ides_list[0])
+        ides_list = ["-- Select IDE --"] + detect_ides()
+        ide_var = tk.StringVar(value="-- Select IDE --")
         ide_combo = ttk.Combobox(
             ide_frame,
             values=ides_list,
@@ -295,9 +295,11 @@ class DevModeApp:
             original_name = preset_data.get("name", "")
             entry.insert(0, original_name)
 
-            ide_val = preset_data.get("ide", ides_list[0])
+            ide_val = preset_data.get("ide", "-- Select IDE --")
             if ide_val in ides_list:
                 ide_var.set(ide_val)
+            else:
+                ide_var.set("-- Select IDE --")
 
             playlist_val = preset_data.get("playlist", "")
             if playlist_val in playlist_options:
@@ -323,6 +325,11 @@ class DevModeApp:
                 warning_label.config(
                     text="Please fill in the Preset name before saving."
                 )
+                return
+
+            selected_ide = ide_var.get()
+            if selected_ide == "-- Select IDE --":
+                warning_label.config(text="Please select a Default IDE.")
                 return
             warning_label.config(text="")
 
@@ -352,7 +359,7 @@ class DevModeApp:
             if not is_edit:
                 entry.delete(0, tk.END)
             entry.config(bg=colors["text_light"])
-            ide_combo.set(ides_list[0])
+            ide_var.set("-- Select IDE --")
             playlist_combo.set(
                 playlist_options[0] if playlist_options else "Custom URL"
             )
