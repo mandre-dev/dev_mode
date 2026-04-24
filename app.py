@@ -10,6 +10,8 @@ from presets_manager import (
     get_preset_names,
     delete_preset_by_name,
     add_preset,
+    get_preset_by_name,
+    update_preset,
 )
 from ide_detector import detect_ides
 from music_detector import detect_music_apps
@@ -84,7 +86,15 @@ class DevModeApp:
         self.combo.pack(side="left")
 
         # Botão Editar
-        btn_edit = create_icon_button(row, "editar.png", "Editar")
+        def _on_edit():
+            selected = self.combo.get()
+            if not selected:
+                return
+            preset = get_preset_by_name(selected)
+            if preset:
+                self._build_add_screen(preset_data=preset)
+
+        btn_edit = create_icon_button(row, "editar.png", "Editar", command=_on_edit)
         btn_edit.pack(side="left", padx=(10, 0))
         ToolTip(btn_edit, "Editar")
 
@@ -121,16 +131,20 @@ class DevModeApp:
         """Ação do botão Apply (a implementar)."""
         pass
 
-    def _build_add_screen(self):
-        """Constrói a tela de adicionar preset."""
+    def _build_add_screen(self, preset_data=None):
+        """Constrói a tela de adicionar/editar preset."""
         self._clear_screen()
         # Aumenta a altura da janela para caber os novos campos
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT + 160}")
 
+        is_edit = preset_data is not None
+        banner_text = "Editing Preset" if is_edit else "Adding Preset"
+        btn_text = "Update" if is_edit else "Save Preset"
+
         # Banner
         tk.Label(
             self.center_frame,
-            text="Adding Preset",
+            text=banner_text,
             font=("Arial", 13, "bold"),
             fg=colors["yellow"],
             bg=colors["bg"],
@@ -154,7 +168,13 @@ class DevModeApp:
             bg=colors["bg"],
         ).pack(side="left", padx=(0, 10))
 
-        entry = tk.Entry(frame, font=("Arial", 12), width=18, bg=colors["text_light"])
+        entry = tk.Entry(
+            frame,
+            font=("Arial", 12),
+            width=18,
+            bg=colors["text_light"],
+            state="readonly" if is_edit else "normal",
+        )
         entry.pack(side="left")
 
         warning_label = tk.Label(
@@ -270,6 +290,29 @@ class DevModeApp:
         )
         brightness_scale.pack(side="left")
 
+        # Preenche campos se estiver em modo de edição
+        if is_edit:
+            entry.config(state="normal")
+            entry.insert(0, preset_data.get("name", ""))
+            entry.config(state="readonly")
+
+            ide_val = preset_data.get("ide", ides_list[0])
+            if ide_val in ides_list:
+                ide_var.set(ide_val)
+
+            playlist_val = preset_data.get("playlist", "")
+            if playlist_val in playlist_options:
+                playlist_var.set(playlist_val)
+            else:
+                # Assume que é uma URL customizada
+                playlist_var.set("Custom URL")
+                url_entry.delete(0, tk.END)
+                url_entry.insert(0, playlist_val)
+            toggle_url_field()
+
+            brightness_val = preset_data.get("brightness", 100)
+            brightness_var.set(brightness_val)
+
         # Botões
         btns_frame = tk.Frame(self.center_frame, bg=colors["bg"])
         btns_frame.pack(pady=(10, 0))
@@ -288,18 +331,22 @@ class DevModeApp:
             if playlist == "Custom URL":
                 playlist = url_entry.get().strip()
 
-            add_preset(name, ide_var.get(), playlist, brightness_var.get())
+            if is_edit:
+                update_preset(name, ide_var.get(), playlist, brightness_var.get())
+            else:
+                add_preset(name, ide_var.get(), playlist, brightness_var.get())
             entry.delete(0, tk.END)
             entry.config(bg=colors["success_bg"])
             self._build_main_screen()
 
         save_btn = create_shadow_button(
-            btns_frame, 120, 36, "Save Preset", click_command=do_save
+            btns_frame, 120, 36, btn_text, click_command=do_save
         )
         save_btn.pack(side="left", padx=(0, 8))
 
         def do_clean():
-            entry.delete(0, tk.END)
+            if not is_edit:
+                entry.delete(0, tk.END)
             entry.config(bg=colors["text_light"])
             ide_combo.set(ides_list[0])
             playlist_combo.set(

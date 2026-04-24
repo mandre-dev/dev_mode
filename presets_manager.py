@@ -46,3 +46,24 @@ def add_preset(name, ide, playlist="", brightness=100):
             {"name": name, "ide": ide, "playlist": playlist, "brightness": brightness}
         )
         save_presets(presets)
+
+
+def get_preset_by_name(name):
+    """Retorna um preset pelo nome ou None se não encontrar."""
+    for p in load_presets():
+        if p.get("name") == name:
+            return p
+    return None
+
+
+def update_preset(name, ide, playlist="", brightness=100):
+    """Atualiza um preset existente pelo nome."""
+    presets = load_presets()
+    for p in presets:
+        if p.get("name") == name:
+            p["ide"] = ide
+            p["playlist"] = playlist
+            p["brightness"] = brightness
+            save_presets(presets)
+            return True
+    return False
