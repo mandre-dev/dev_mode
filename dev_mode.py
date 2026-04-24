@@ -121,7 +121,50 @@ except Exception:
 btn_edit.pack(side="left", padx=(10, 0))
 ToolTip(btn_edit, "Editar")
 
-# Botão de adicionar
+
+
+# Função para atualizar a janela principal e mostrar apenas o campo de preset
+def show_preset_name_input():
+    # Remove todos os widgets do frame centralizador, exceto o título
+    for widget in center_frame.winfo_children():
+        # Mantém o frame do título
+        if widget == title_frame:
+            continue
+        widget.destroy()
+
+    # Faixa "Adding Preset" abaixo do título
+
+    banner = tk.Label(
+        center_frame,
+        text="Adding Preset",
+        font=("Arial", 13, "bold"),
+        fg="#FFD700",
+        bg="#101820",
+        pady=8,
+        bd=2,
+        relief="solid",
+        highlightbackground="#FFFFFF",
+        highlightcolor="#FFFFFF",
+        highlightthickness=2
+    )
+    banner.pack(pady=(10, 18), fill="x", padx=40)
+
+    # Novo frame para centralizar o campo
+    frame = tk.Frame(center_frame, bg="#101820")
+    frame.pack(expand=True)
+
+    label = tk.Label(
+        frame,
+        text="Preset name:",
+        font=("Arial", 12),
+        fg="#00AEEF",
+        bg="#101820",
+    )
+    label.pack(side="left", padx=(0, 10))
+
+    entry = tk.Entry(frame, font=("Arial", 12), width=18)
+    entry.pack(side="left")
+
 try:
     add_icon = PhotoImage(file="adicionar.png")
     # Reduz a imagem proporcionalmente para ~20x20 px
@@ -134,6 +177,7 @@ try:
         bg="#101820",
         bd=0,
         activebackground="#101820",
+        command=show_preset_name_input
     )
     btn_add.image = add_icon  # manter referência
 except Exception:
@@ -144,6 +188,7 @@ except Exception:
         fg="#00AEEF",
         bd=0,
         activebackground="#101820",
+        command=show_preset_name_input
     )
 btn_add.pack(side="left", padx=(10, 0))
 ToolTip(btn_add, "Adicionar")
