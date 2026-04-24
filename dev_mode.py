@@ -1,3 +1,23 @@
+import subprocess
+import json
+import os
+# Caminho do arquivo de presets
+PRESETS_FILE = os.path.join(os.path.expanduser("~"), ".dev_mode_presets.json")
+
+# Função para carregar presets
+def load_presets():
+    if os.path.exists(PRESETS_FILE):
+        with open(PRESETS_FILE, "r", encoding="utf-8") as f:
+            try:
+                return json.load(f)
+            except Exception:
+                return []
+    return []
+
+# Função para salvar presets
+def save_presets(presets):
+    with open(PRESETS_FILE, "w", encoding="utf-8") as f:
+        json.dump(presets, f, ensure_ascii=False, indent=2)
 import tkinter as tk
 
 
@@ -122,7 +142,6 @@ btn_edit.pack(side="left", padx=(10, 0))
 ToolTip(btn_edit, "Editar")
 
 
-
 # Função para atualizar a janela principal e mostrar apenas o campo de preset
 def show_preset_name_input():
     # Remove todos os widgets do frame centralizador, exceto o título
@@ -145,13 +164,13 @@ def show_preset_name_input():
         relief="solid",
         highlightbackground="#FFFFFF",
         highlightcolor="#FFFFFF",
-        highlightthickness=2
+        highlightthickness=2,
     )
     banner.pack(pady=(10, 18), fill="x", padx=40)
 
     # Novo frame para centralizar o campo
     frame = tk.Frame(center_frame, bg="#101820")
-    frame.pack(expand=True)
+    frame.pack(expand=True, pady=(0, 18))
 
     label = tk.Label(
         frame,
@@ -162,8 +181,87 @@ def show_preset_name_input():
     )
     label.pack(side="left", padx=(0, 10))
 
+
+
     entry = tk.Entry(frame, font=("Arial", 12), width=18)
     entry.pack(side="left")
+
+    # Função para detectar IDEs instaladas
+    def detect_ides():
+        ides = []
+        # Lista de comandos e nomes de IDEs populares
+        ide_commands = [
+            ("code", "VS Code"),
+            ("codium", "VSCodium"),
+            ("pycharm", "PyCharm"),
+            ("idea", "IntelliJ IDEA"),
+            ("subl", "Sublime Text"),
+            ("atom", "Atom"),
+            ("gedit", "Gedit"),
+            ("kate", "Kate"),
+            ("geany", "Geany"),
+            ("emacs", "Emacs"),
+            ("vim", "Vim"),
+            ("nano", "Nano"),
+        ]
+        for cmd, name in ide_commands:
+            if subprocess.call(["which", cmd], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+                ides.append(name)
+        return ides if ides else ["None found"]
+
+    # Frame para IDE
+    ide_frame = tk.Frame(center_frame, bg="#101820")
+    ide_frame.pack(pady=(0, 18))
+
+    ide_label = tk.Label(
+        ide_frame,
+        text="Default IDE:",
+        font=("Arial", 12),
+        fg="#00AEEF",
+        bg="#101820",
+    )
+    ide_label.pack(side="left", padx=(0, 10))
+
+    ides_list = detect_ides()
+    ide_var = tk.StringVar(value=ides_list[0])
+    ide_combo = ttk.Combobox(
+        ide_frame,
+        values=ides_list,
+        state="readonly",
+        font=("Arial", 12),
+        width=18,
+        textvariable=ide_var
+    )
+    ide_combo.pack(side="left")
+
+    def save_preset():
+        name = entry.get().strip()
+        ide = ide_var.get()
+        if not name:
+            entry.config(bg="#FFD2D2")
+            return
+        presets = load_presets()
+        # Salva como dicionário para permitir mais campos no futuro
+        preset_obj = {"name": name, "ide": ide}
+        if not any(p.get("name") == name for p in presets):
+            presets.append(preset_obj)
+            save_presets(presets)
+        entry.delete(0, tk.END)
+        entry.config(bg="#D2FFD2")
+
+    save_btn = tk.Button(
+        center_frame,
+        text="Save Preset",
+        font=("Arial", 12, "bold"),
+        fg="#FFD700",
+        bg="#00AEEF",
+        activebackground="#008BC7",
+        bd=0,
+        cursor="hand2",
+        command=save_preset
+    )
+    save_btn.pack(pady=(10, 0))
+
 
 try:
     add_icon = PhotoImage(file="adicionar.png")
@@ -177,7 +275,7 @@ try:
         bg="#101820",
         bd=0,
         activebackground="#101820",
-        command=show_preset_name_input
+        command=show_preset_name_input,
     )
     btn_add.image = add_icon  # manter referência
 except Exception:
@@ -188,7 +286,7 @@ except Exception:
         fg="#00AEEF",
         bd=0,
         activebackground="#101820",
-        command=show_preset_name_input
+        command=show_preset_name_input,
     )
 btn_add.pack(side="left", padx=(10, 0))
 ToolTip(btn_add, "Adicionar")
