@@ -216,10 +216,10 @@ class DevModeApp:
         )
         playlist_combo.pack(side="left")
 
-        # Campo URL (aparece quando Custom URL é selecionado)
-        url_frame = tk.Frame(self.center_frame, bg=colors["bg"])
+        # Campo URL (aparece logo embaixo quando Custom URL é selecionado)
+        url_container = tk.Frame(self.center_frame, bg=colors["bg"])
         url_label = tk.Label(
-            url_frame,
+            url_container,
             text="Playlist URL:",
             font=("Arial", 12),
             fg=colors["accent"],
@@ -227,15 +227,15 @@ class DevModeApp:
         )
         url_label.pack(side="left", padx=(0, 10))
         url_entry = tk.Entry(
-            url_frame, font=("Arial", 12), width=22, bg=colors["text_light"]
+            url_container, font=("Arial", 12), width=22, bg=colors["text_light"]
         )
         url_entry.pack(side="left")
 
         def toggle_url_field(event=None):
             if playlist_var.get() == "Custom URL":
-                url_frame.pack(pady=(0, 10))
+                url_container.pack(pady=(0, 10), after=music_frame)
             else:
-                url_frame.pack_forget()
+                url_container.pack_forget()
 
         playlist_combo.bind("<<ComboboxSelected>>", toggle_url_field)
         toggle_url_field()
