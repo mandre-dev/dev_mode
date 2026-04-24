@@ -173,7 +173,6 @@ class DevModeApp:
             font=("Arial", 12),
             width=18,
             bg=colors["text_light"],
-            state="readonly" if is_edit else "normal",
         )
         entry.pack(side="left")
 
@@ -291,10 +290,10 @@ class DevModeApp:
         brightness_scale.pack(side="left")
 
         # Preenche campos se estiver em modo de edição
+        original_name = ""
         if is_edit:
-            entry.config(state="normal")
-            entry.insert(0, preset_data.get("name", ""))
-            entry.config(state="readonly")
+            original_name = preset_data.get("name", "")
+            entry.insert(0, original_name)
 
             ide_val = preset_data.get("ide", ides_list[0])
             if ide_val in ides_list:
@@ -332,7 +331,12 @@ class DevModeApp:
                 playlist = url_entry.get().strip()
 
             if is_edit:
-                update_preset(name, ide_var.get(), playlist, brightness_var.get())
+                success = update_preset(
+                    original_name, name, ide_var.get(), playlist, brightness_var.get()
+                )
+                if not success:
+                    warning_label.config(text="A preset with this name already exists.")
+                    return
             else:
                 add_preset(name, ide_var.get(), playlist, brightness_var.get())
             entry.delete(0, tk.END)

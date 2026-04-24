@@ -56,14 +56,25 @@ def get_preset_by_name(name):
     return None
 
 
-def update_preset(name, ide, playlist="", brightness=100):
-    """Atualiza um preset existente pelo nome."""
+def update_preset(old_name, new_name, ide, playlist="", brightness=100):
+    """Atualiza um preset existente, permitindo renomear."""
     presets = load_presets()
+    target = None
     for p in presets:
-        if p.get("name") == name:
-            p["ide"] = ide
-            p["playlist"] = playlist
-            p["brightness"] = brightness
-            save_presets(presets)
-            return True
-    return False
+        if p.get("name") == old_name:
+            target = p
+            break
+    if not target:
+        return False
+
+    # Se o nome mudou, verifica se já existe outro preset com esse nome
+    if new_name != old_name:
+        if any(p.get("name") == new_name for p in presets):
+            return False  # nome já existe
+        target["name"] = new_name
+
+    target["ide"] = ide
+    target["playlist"] = playlist
+    target["brightness"] = brightness
+    save_presets(presets)
+    return True
