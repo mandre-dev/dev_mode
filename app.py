@@ -12,6 +12,7 @@ from presets_manager import (
     add_preset,
 )
 from ide_detector import detect_ides
+from music_detector import detect_music_apps
 from ui_components import ToolTip, create_icon_button, create_shadow_button
 
 
@@ -58,6 +59,7 @@ class DevModeApp:
     def _build_main_screen(self):
         """Constrói a tela principal com combobox e botões."""
         self._clear_screen()
+        self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
 
         row = tk.Frame(self.center_frame, bg=colors["bg"])
         row.pack(pady=20)
@@ -121,6 +123,8 @@ class DevModeApp:
     def _build_add_screen(self):
         """Constrói a tela de adicionar preset."""
         self._clear_screen()
+        # Aumenta a altura da janela para caber os novos campos
+        self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT + 100}")
 
         # Banner
         tk.Label(
@@ -135,11 +139,11 @@ class DevModeApp:
             highlightbackground=colors["text_light"],
             highlightcolor=colors["text_light"],
             highlightthickness=2,
-        ).pack(pady=(10, 18), fill="x", padx=40)
+        ).pack(pady=(10, 14), fill="x", padx=40)
 
         # Campo nome
         frame = tk.Frame(self.center_frame, bg=colors["bg"])
-        frame.pack(expand=True, pady=(0, 18))
+        frame.pack(pady=(0, 10))
 
         tk.Label(
             frame,
@@ -163,7 +167,7 @@ class DevModeApp:
 
         # IDE
         ide_frame = tk.Frame(self.center_frame, bg=colors["bg"])
-        ide_frame.pack(pady=(0, 18))
+        ide_frame.pack(pady=(0, 10))
 
         tk.Label(
             ide_frame,
@@ -185,6 +189,57 @@ class DevModeApp:
         )
         ide_combo.pack(side="left")
 
+        # Playlist
+        music_frame = tk.Frame(self.center_frame, bg=colors["bg"])
+        music_frame.pack(pady=(0, 10))
+
+        tk.Label(
+            music_frame,
+            text="Playlist:",
+            font=("Arial", 12),
+            fg=colors["accent"],
+            bg=colors["bg"],
+        ).pack(side="left", padx=(0, 10))
+
+        music_apps = detect_music_apps()
+        playlist_options = music_apps + ["Custom URL"]
+        playlist_var = tk.StringVar(
+            value=playlist_options[0] if playlist_options else "Custom URL"
+        )
+        playlist_combo = ttk.Combobox(
+            music_frame,
+            values=playlist_options,
+            state="readonly",
+            font=("Arial", 12),
+            width=18,
+            textvariable=playlist_var,
+        )
+        playlist_combo.pack(side="left")
+
+        # Campo URL (aparece quando Custom URL é selecionado)
+        url_frame = tk.Frame(self.center_frame, bg=colors["bg"])
+        url_label = tk.Label(
+            url_frame,
+            text="Playlist URL:",
+            font=("Arial", 12),
+            fg=colors["accent"],
+            bg=colors["bg"],
+        )
+        url_label.pack(side="left", padx=(0, 10))
+        url_entry = tk.Entry(
+            url_frame, font=("Arial", 12), width=22, bg=colors["text_light"]
+        )
+        url_entry.pack(side="left")
+
+        def toggle_url_field(event=None):
+            if playlist_var.get() == "Custom URL":
+                url_frame.pack(pady=(0, 10))
+            else:
+                url_frame.pack_forget()
+
+        playlist_combo.bind("<<ComboboxSelected>>", toggle_url_field)
+        toggle_url_field()
+
         # Botões
         btns_frame = tk.Frame(self.center_frame, bg=colors["bg"])
         btns_frame.pack(pady=(10, 0))
@@ -198,7 +253,12 @@ class DevModeApp:
                 )
                 return
             warning_label.config(text="")
-            add_preset(name, ide_var.get())
+
+            playlist = playlist_var.get()
+            if playlist == "Custom URL":
+                playlist = url_entry.get().strip()
+
+            add_preset(name, ide_var.get(), playlist)
             entry.delete(0, tk.END)
             entry.config(bg=colors["success_bg"])
             self._build_main_screen()
@@ -212,6 +272,11 @@ class DevModeApp:
             entry.delete(0, tk.END)
             entry.config(bg=colors["text_light"])
             ide_combo.set(ides_list[0])
+            playlist_combo.set(
+                playlist_options[0] if playlist_options else "Custom URL"
+            )
+            url_entry.delete(0, tk.END)
+            toggle_url_field()
 
         clean_btn = tk.Button(
             btns_frame,
