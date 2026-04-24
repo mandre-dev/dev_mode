@@ -38,9 +38,11 @@ def delete_preset_by_name(name):
     return presets
 
 
-def add_preset(name, ide, playlist=""):
+def add_preset(name, ide, playlist="", brightness=100):
     """Adiciona um novo preset se o nome não existir."""
     presets = load_presets()
     if not any(p.get("name") == name for p in presets):
-        presets.append({"name": name, "ide": ide, "playlist": playlist})
+        presets.append(
+            {"name": name, "ide": ide, "playlist": playlist, "brightness": brightness}
+        )
         save_presets(presets)

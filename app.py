@@ -13,6 +13,7 @@ from presets_manager import (
 )
 from ide_detector import detect_ides
 from music_detector import detect_music_apps
+from brightness_controller import set_brightness
 from ui_components import ToolTip, create_icon_button, create_shadow_button
 
 
@@ -124,7 +125,7 @@ class DevModeApp:
         """Constrói a tela de adicionar preset."""
         self._clear_screen()
         # Aumenta a altura da janela para caber os novos campos
-        self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT + 100}")
+        self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT + 160}")
 
         # Banner
         tk.Label(
@@ -240,6 +241,35 @@ class DevModeApp:
         playlist_combo.bind("<<ComboboxSelected>>", toggle_url_field)
         toggle_url_field()
 
+        # Brilho do monitor
+        brightness_frame = tk.Frame(self.center_frame, bg=colors["bg"])
+        brightness_frame.pack(pady=(0, 10))
+
+        tk.Label(
+            brightness_frame,
+            text="Brightness:",
+            font=("Arial", 12),
+            fg=colors["accent"],
+            bg=colors["bg"],
+        ).pack(side="left", padx=(0, 10))
+
+        brightness_var = tk.IntVar(value=100)
+        brightness_scale = tk.Scale(
+            brightness_frame,
+            from_=10,
+            to=100,
+            orient="horizontal",
+            length=150,
+            variable=brightness_var,
+            bg=colors["bg"],
+            fg=colors["accent"],
+            highlightthickness=0,
+            troughcolor=colors["text_dark"],
+            activebackground=colors["accent"],
+            showvalue=True,
+        )
+        brightness_scale.pack(side="left")
+
         # Botões
         btns_frame = tk.Frame(self.center_frame, bg=colors["bg"])
         btns_frame.pack(pady=(10, 0))
@@ -258,7 +288,7 @@ class DevModeApp:
             if playlist == "Custom URL":
                 playlist = url_entry.get().strip()
 
-            add_preset(name, ide_var.get(), playlist)
+            add_preset(name, ide_var.get(), playlist, brightness_var.get())
             entry.delete(0, tk.END)
             entry.config(bg=colors["success_bg"])
             self._build_main_screen()
@@ -277,6 +307,7 @@ class DevModeApp:
             )
             url_entry.delete(0, tk.END)
             toggle_url_field()
+            brightness_var.set(100)
 
         clean_btn = tk.Button(
             btns_frame,
