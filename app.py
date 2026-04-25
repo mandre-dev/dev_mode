@@ -71,19 +71,19 @@ class DevModeApp:
         return frame
 
     def _create_underscore_image(self, font_size, color, bg_color):
-        """Cria uma imagem de underscore manualmente como uma linha horizontal."""
+        """Cria uma imagem de underline manualmente como uma linha horizontal na parte inferior."""
         from PIL import Image, ImageDraw
 
         # Largura proporcional ao tamanho da fonte
         width = font_size
-        # Altura pequena para a linha
-        height = max(4, font_size // 4)
+        # Altura maior para criar espaço acima (efeito de underline)
+        height = max(12, font_size // 2)
 
         img = Image.new("RGBA", (width, height), bg_color)
         draw = ImageDraw.Draw(img)
 
-        # Desenha uma linha horizontal no centro
-        line_y = height // 2
+        # Desenha uma linha horizontal na parte inferior (efeito underline)
+        line_y = height - max(2, font_size // 10)
         draw.line(
             [(0, line_y), (width, line_y)], fill=color, width=max(2, font_size // 8)
         )
