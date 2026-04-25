@@ -1,7 +1,21 @@
 """Renderiza texto com fontes TTF customizadas para uso no tkinter."""
 
 import os
-from PIL import Image, ImageDraw, ImageFont, ImageTk
+import io
+import base64
+import tkinter as tk
+from PIL import Image, ImageDraw, ImageFont
+
+
+def _pil_to_photoimage(pil_img):
+    """Converte uma imagem PIL para tkinter.PhotoImage sem ImageTk."""
+    # Salva em formato PNG na memória
+    buffer = io.BytesIO()
+    pil_img.save(buffer, format="PNG")
+    buffer.seek(0)
+    # Codifica em base64 para PhotoImage
+    b64 = base64.b64encode(buffer.read()).decode("utf-8")
+    return tk.PhotoImage(data=b64)
 
 
 def render_text_image(text, font_path, font_size, color, bg_color=None):
@@ -40,7 +54,7 @@ def render_text_image(text, font_path, font_size, color, bg_color=None):
     draw = ImageDraw.Draw(img)
     draw.text((padding_x, padding_y), text, font=font, fill=color)
 
-    return ImageTk.PhotoImage(img)
+    return _pil_to_photoimage(img)
 
 
 def get_font_path(filename):
