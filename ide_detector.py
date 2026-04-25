@@ -41,6 +41,9 @@ IDE_COMMANDS = [
     ("oni2", "Oni 2"),
 ]
 
+# Mapeamento nome -> comando para fácil lookup
+IDE_NAME_TO_CMD = {name: cmd for cmd, name in IDE_COMMANDS}
+
 # Caminhos alternativos onde IDEs podem estar instaladas (snap, flatpak, appimages, etc.)
 EXTRA_PATHS = [
     "/usr/bin",
@@ -105,3 +108,8 @@ def detect_ides():
             ides.append(name)
             seen.add(name)
     return ides if ides else ["None found"]
+
+
+def get_ide_command(ide_name):
+    """Retorna o comando executável para uma IDE pelo nome de exibição."""
+    return IDE_NAME_TO_CMD.get(ide_name)

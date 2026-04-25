@@ -16,6 +16,7 @@ from presets_manager import (
 from ide_detector import detect_ides
 from music_detector import detect_music_apps
 from brightness_controller import set_brightness
+from preset_applier import apply_preset
 from ui_components import ToolTip, create_icon_button, create_shadow_button
 
 
@@ -96,21 +97,21 @@ class DevModeApp:
 
         btn_edit = create_icon_button(row, "editar.png", "Editar", command=_on_edit)
         btn_edit.pack(side="left", padx=(10, 0))
-        ToolTip(btn_edit, "Editar")
+        ToolTip(btn_edit, "Edit")
 
         # Botão Adicionar
         btn_add = create_icon_button(
             row, "adicionar.png", "Adicionar", command=self._build_add_screen
         )
         btn_add.pack(side="left", padx=(10, 0))
-        ToolTip(btn_add, "Adicionar")
+        ToolTip(btn_add, "Add")
 
         # Botão Excluir
         btn_delete = create_icon_button(
             row, "excluir.png", "Excluir", command=self._on_delete
         )
         btn_delete.pack(side="left", padx=(10, 0))
-        ToolTip(btn_delete, "Excluir")
+        ToolTip(btn_delete, "Delete")
 
         # Botão Apply
         apply_btn = create_shadow_button(
@@ -128,8 +129,58 @@ class DevModeApp:
         self.combo.set("")
 
     def _on_apply(self):
-        """Ação do botão Apply (a implementar)."""
-        pass
+        """Aplica o preset selecionado: IDE, playlist e brilho."""
+        selected = self.combo.get()
+        if not selected:
+            self._set_status("Select a preset first!", colors["warning"])
+            return
+
+        preset = get_preset_by_name(selected)
+        if not preset:
+            self._set_status("Preset not found!", colors["warning"])
+            return
+
+        results = apply_preset(preset)
+
+        # Monta mensagem de feedback
+        parts = []
+        if results["ide"]:
+            parts.append(f"IDE: {preset.get('ide', '')}")
+        if results["playlist"]:
+            parts.append("Playlist opened")
+        if results["brightness"]:
+            parts.append(f"Brightness: {preset.get('brightness', 100)}%")
+
+        if parts:
+            self._set_status("Applied: " + " | ".join(parts), colors["success_bg"])
+        else:
+            self._set_status("Could not apply preset.", colors["warning"])
+
+    def _set_status(self, message, color):
+        """Exibe uma mensagem de status temporária na tela principal."""
+        if hasattr(self, "_status_label"):
+            self._status_label.destroy()
+
+        self._status_label = tk.Label(
+            self.center_frame,
+            text=message,
+            font=("Arial", 10, "bold"),
+            fg=colors["text_light"] if color != colors["success_bg"] else "#006400",
+            bg=color,
+            padx=10,
+            pady=4,
+            bd=1,
+            relief="solid",
+        )
+        self._status_label.pack(pady=(8, 0))
+
+        # Limpa a mensagem após 4 segundos
+        self.root.after(
+            4000,
+            lambda: (
+                self._status_label.destroy() if hasattr(self, "_status_label") else None
+            ),
+        )
 
     def _build_add_screen(self, preset_data=None):
         """Constrói a tela de adicionar/editar preset."""
