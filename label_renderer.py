@@ -7,9 +7,8 @@ from font_renderer import get_font_path, _pil_to_photoimage
 
 # Cache de imagens de label para evitar recriação
 def _get_jetbrains_font(size=12, bold=False):
-    """Carrega a fonte JetBrains Mono no tamanho e peso especificados."""
-    font_name = "JetBrainsMono-ExtraBold.ttf" if bold else "JetBrainsMono-Regular.ttf"
-    font_path = get_font_path(font_name)
+    """Carrega a fonte JetBrains Mono ExtraBold para todos os textos."""
+    font_path = get_font_path("JetBrainsMono-ExtraBold.ttf")
     try:
         return ImageFont.truetype(font_path, size)
     except Exception:
