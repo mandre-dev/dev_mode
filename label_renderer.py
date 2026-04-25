@@ -6,9 +6,10 @@ from font_renderer import get_font_path, _pil_to_photoimage
 
 
 # Cache de imagens de label para evitar recriação
-def _get_dotgothic_font(size=12):
-    """Carrega a fonte DotGothic16-Regular no tamanho especificado."""
-    font_path = get_font_path("DotGothic16-Regular.ttf")
+def _get_jetbrains_font(size=12, bold=False):
+    """Carrega a fonte JetBrains Mono no tamanho e peso especificados."""
+    font_name = "JetBrainsMono-Bold.ttf" if bold else "JetBrainsMono-Regular.ttf"
+    font_path = get_font_path(font_name)
     try:
         return ImageFont.truetype(font_path, size)
     except Exception:
@@ -26,14 +27,10 @@ def create_rendered_label(
     **kwargs,
 ):
     """
-    Cria um tk.Label com texto renderizado via PIL usando DotGothic16.
+    Cria um tk.Label com texto renderizado via PIL usando JetBrains Mono.
     Retorna o widget Label e armazena a referência da imagem nele.
     """
-    font = _get_dotgothic_font(font_size)
-
-    # Se for bold, aumenta ligeiramente o tamanho para simular
-    if bold and font_size < 16:
-        font = _get_dotgothic_font(font_size + 1)
+    font = _get_jetbrains_font(font_size, bold)
 
     # Calcula bounds do texto
     bbox = font.getbbox(text)
@@ -71,9 +68,7 @@ def update_rendered_label(
     label, text, font_size=12, fg_color="#FFFFFF", bg_color="#101820", bold=False
 ):
     """Atualiza o texto de um label renderizado."""
-    font = _get_dotgothic_font(font_size)
-    if bold and font_size < 16:
-        font = _get_dotgothic_font(font_size + 1)
+    font = _get_jetbrains_font(font_size, bold)
 
     bbox = font.getbbox(text)
     width = bbox[2] - bbox[0] + 8

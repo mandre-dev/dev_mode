@@ -30,15 +30,15 @@ colors = {
 # Fontes
 FONTS = {
     "title": ("Press Start 2P", 18),
-    "default": ("DotGothic16", 12),
-    "default_bold": ("DotGothic16", 12, "bold"),
-    "banner": ("DotGothic16", 13, "bold"),
-    "status": ("DotGothic16", 10, "bold"),
-    "warning": ("DotGothic16", 10, "bold"),
+    "default": ("JetBrains Mono", 12),
+    "default_bold": ("JetBrains Mono", 12, "bold"),
+    "banner": ("JetBrains Mono", 13, "bold"),
+    "status": ("JetBrains Mono", 10, "bold"),
+    "warning": ("JetBrains Mono", 10, "bold"),
 }
 
-# Fonte fallback se DotGothic16 não estiver disponível
-FALLBACK_FONT = ("Noto Sans", 12)
+# Fonte fallback se JetBrains Mono não estiver disponível
+FALLBACK_FONT = ("Noto Sans Mono", 12)
 
 # Caminho do arquivo de presets
 PRESETS_FILE = os.path.join(os.path.expanduser("~"), ".dev_mode_presets.json")
