@@ -49,7 +49,7 @@ class DevModeApp:
             ("_", colors["title_underscore"]),
             ("Mode", colors["title_mode"]),
         ]:
-            img = render_text_image(text, font_path, 14, color, colors["bg"])
+            img = render_text_image(text, font_path, 18, color, colors["bg"])
             self._title_images.append(img)
             lbl = tk.Label(frame, image=img, bg=colors["bg"])
             lbl.pack(side="left")
