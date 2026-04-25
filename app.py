@@ -360,7 +360,7 @@ class DevModeApp:
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
-        lbl_brightness.pack(side="left", padx=(0, 10))
+        lbl_brightness.pack(side="left", padx=(0, 10), anchor="center")
 
         brightness_var = tk.IntVar(value=100)
         brightness_scale = tk.Scale(
@@ -377,7 +377,7 @@ class DevModeApp:
             activebackground=colors["accent"],
             showvalue=True,
         )
-        brightness_scale.pack(side="left")
+        brightness_scale.pack(side="left", anchor="center")
 
         # Preenche campos se estiver em modo de edição
         original_name = ""
