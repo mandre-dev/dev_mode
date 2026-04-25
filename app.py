@@ -18,7 +18,7 @@ from music_detector import detect_music_apps
 from brightness_controller import set_brightness
 from preset_applier import apply_preset
 from ui_components import ToolTip, create_icon_button, create_shadow_button
-from font_renderer import render_text_image, get_font_path
+from font_renderer import render_text_image, get_font_path, _pil_to_photoimage
 
 
 class DevModeApp:
@@ -44,16 +44,51 @@ class DevModeApp:
 
         self._title_images = []  # Manter referências para evitar garbage collection
 
-        for text, color in [
-            ("Dev", colors["title_dev"]),
-            ("_", colors["title_underscore"]),
-            ("Mode", colors["title_mode"]),
-        ]:
-            img = render_text_image(text, font_path, 18, color, colors["bg"])
-            self._title_images.append(img)
-            lbl = tk.Label(frame, image=img, bg=colors["bg"])
-            lbl.pack(side="left")
+        # Renderiza "Dev" em azul
+        img_dev = render_text_image(
+            "Dev", font_path, 18, colors["title_dev"], colors["bg"]
+        )
+        self._title_images.append(img_dev)
+        lbl_dev = tk.Label(frame, image=img_dev, bg=colors["bg"])
+        lbl_dev.pack(side="left")
+
+        # Renderiza underscore manualmente como uma linha branca
+        img_underscore = self._create_underscore_image(
+            18, colors["title_underscore"], colors["bg"]
+        )
+        self._title_images.append(img_underscore)
+        lbl_underscore = tk.Label(frame, image=img_underscore, bg=colors["bg"])
+        lbl_underscore.pack(side="left", padx=2)
+
+        # Renderiza "Mode" em amarelo/dourado
+        img_mode = render_text_image(
+            "Mode", font_path, 18, colors["title_mode"], colors["bg"]
+        )
+        self._title_images.append(img_mode)
+        lbl_mode = tk.Label(frame, image=img_mode, bg=colors["bg"])
+        lbl_mode.pack(side="left")
+
         return frame
+
+    def _create_underscore_image(self, font_size, color, bg_color):
+        """Cria uma imagem de underscore manualmente como uma linha horizontal."""
+        from PIL import Image, ImageDraw
+
+        # Largura proporcional ao tamanho da fonte
+        width = font_size
+        # Altura pequena para a linha
+        height = max(4, font_size // 4)
+
+        img = Image.new("RGBA", (width, height), bg_color)
+        draw = ImageDraw.Draw(img)
+
+        # Desenha uma linha horizontal no centro
+        line_y = height // 2
+        draw.line(
+            [(0, line_y), (width, line_y)], fill=color, width=max(2, font_size // 8)
+        )
+
+        return _pil_to_photoimage(img)
 
     def _clear_screen(self):
         """Remove todos os widgets exceto o título."""
