@@ -109,7 +109,7 @@ class DevModeApp:
         lbl_preset = create_rendered_label(
             row,
             text="Preset:",
-            font_size=12,
+            font_size=14,
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
@@ -203,7 +203,7 @@ class DevModeApp:
         self._status_label = create_rendered_label(
             self.center_frame,
             text=message,
-            font_size=10,
+            font_size=11,
             fg_color=(
                 colors["text_light"] if color != colors["success_bg"] else "#006400"
             ),
@@ -234,7 +234,7 @@ class DevModeApp:
         lbl_banner = create_rendered_label(
             self.center_frame,
             text=banner_text,
-            font_size=13,
+            font_size=14,
             fg_color=colors["yellow"],
             bg_color=colors["bg"],
             bold=True,
@@ -248,7 +248,7 @@ class DevModeApp:
         lbl_preset_name = create_rendered_label(
             frame,
             text="Preset name:",
-            font_size=12,
+            font_size=14,
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
@@ -265,7 +265,7 @@ class DevModeApp:
         warning_label = create_rendered_label(
             self.center_frame,
             text="",
-            font_size=10,
+            font_size=11,
             fg_color=colors["warning"],
             bg_color=colors["bg"],
             bold=True,
@@ -279,7 +279,7 @@ class DevModeApp:
         lbl_default_ide = create_rendered_label(
             ide_frame,
             text="Default IDE:",
-            font_size=12,
+            font_size=14,
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
@@ -304,7 +304,7 @@ class DevModeApp:
         lbl_playlist = create_rendered_label(
             music_frame,
             text="Playlist:",
-            font_size=12,
+            font_size=14,
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
@@ -330,7 +330,7 @@ class DevModeApp:
         url_label = create_rendered_label(
             url_container,
             text="Playlist URL:",
-            font_size=12,
+            font_size=14,
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
@@ -356,7 +356,7 @@ class DevModeApp:
         lbl_brightness = create_rendered_label(
             brightness_frame,
             text="Brightness:",
-            font_size=12,
+            font_size=14,
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
@@ -415,7 +415,7 @@ class DevModeApp:
                 update_rendered_label(
                     warning_label,
                     text="Please fill in the Preset name before saving.",
-                    font_size=10,
+                    font_size=11,
                     fg_color=colors["warning"],
                     bg_color=colors["bg"],
                     bold=True,
@@ -427,7 +427,7 @@ class DevModeApp:
                 update_rendered_label(
                     warning_label,
                     text="Please select a Default IDE.",
-                    font_size=10,
+                    font_size=11,
                     fg_color=colors["warning"],
                     bg_color=colors["bg"],
                     bold=True,
@@ -436,7 +436,7 @@ class DevModeApp:
             update_rendered_label(
                 warning_label,
                 text="",
-                font_size=10,
+                font_size=11,
                 fg_color=colors["warning"],
                 bg_color=colors["bg"],
                 bold=True,
@@ -454,7 +454,7 @@ class DevModeApp:
                     update_rendered_label(
                         warning_label,
                         text="A preset with this name already exists.",
-                        font_size=10,
+                        font_size=11,
                         fg_color=colors["warning"],
                         bg_color=colors["bg"],
                         bold=True,
