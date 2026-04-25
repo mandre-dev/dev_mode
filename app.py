@@ -18,6 +18,7 @@ from music_detector import detect_music_apps
 from brightness_controller import set_brightness
 from preset_applier import apply_preset
 from ui_components import ToolTip, create_icon_button, create_shadow_button
+from font_renderer import render_text_image, get_font_path
 
 
 class DevModeApp:
@@ -37,20 +38,21 @@ class DevModeApp:
         self._build_main_screen()
 
     def _build_title(self):
-        """Constrói o título com cores separadas e fonte Press Start 2P."""
+        """Constrói o título com cores separadas e fonte Press Start 2P via PIL."""
         frame = tk.Frame(self.center_frame, bg=colors["bg"])
+        font_path = get_font_path("PressStart2P-Regular.ttf")
+
+        self._title_images = []  # Manter referências para evitar garbage collection
+
         for text, color in [
             ("Dev", colors["title_dev"]),
             ("_", colors["title_underscore"]),
             ("Mode", colors["title_mode"]),
         ]:
-            tk.Label(
-                frame,
-                text=text,
-                font=("Press Start 2P", 14),
-                fg=color,
-                bg=colors["bg"],
-            ).pack(side="left")
+            img = render_text_image(text, font_path, 14, color, colors["bg"])
+            self._title_images.append(img)
+            lbl = tk.Label(frame, image=img, bg=colors["bg"])
+            lbl.pack(side="left")
         return frame
 
     def _clear_screen(self):
