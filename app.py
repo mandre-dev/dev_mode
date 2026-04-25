@@ -37,7 +37,7 @@ class DevModeApp:
         self._build_main_screen()
 
     def _build_title(self):
-        """Constrói o título com cores separadas."""
+        """Constrói o título com cores separadas e fonte Press Start 2P."""
         frame = tk.Frame(self.center_frame, bg=colors["bg"])
         for text, color in [
             ("Dev", colors["title_dev"]),
@@ -47,7 +47,7 @@ class DevModeApp:
             tk.Label(
                 frame,
                 text=text,
-                font=("Arial", 18, "bold"),
+                font=("Press Start 2P", 14),
                 fg=color,
                 bg=colors["bg"],
             ).pack(side="left")
