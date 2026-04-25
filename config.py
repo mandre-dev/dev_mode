@@ -37,6 +37,9 @@ FONTS = {
     "warning": ("DotGothic16", 10, "bold"),
 }
 
+# Fonte fallback se DotGothic16 não estiver disponível
+FALLBACK_FONT = ("Noto Sans", 12)
+
 # Caminho do arquivo de presets
 PRESETS_FILE = os.path.join(os.path.expanduser("~"), ".dev_mode_presets.json")
 

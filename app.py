@@ -19,6 +19,7 @@ from brightness_controller import set_brightness
 from preset_applier import apply_preset
 from ui_components import ToolTip, create_icon_button, create_shadow_button
 from font_renderer import render_text_image, get_font_path, _pil_to_photoimage
+from label_renderer import create_rendered_label, update_rendered_label
 
 
 class DevModeApp:
@@ -105,13 +106,14 @@ class DevModeApp:
         row = tk.Frame(self.center_frame, bg=colors["bg"])
         row.pack(pady=20)
 
-        tk.Label(
+        lbl_preset = create_rendered_label(
             row,
             text="Preset:",
-            font=FONTS["default"],
-            fg=colors["accent"],
-            bg=colors["bg"],
-        ).pack(side="left", padx=(0, 10))
+            font_size=12,
+            fg_color=colors["accent"],
+            bg_color=colors["bg"],
+        )
+        lbl_preset.pack(side="left", padx=(0, 10))
 
         self.combo = ttk.Combobox(
             row,
@@ -198,16 +200,15 @@ class DevModeApp:
         if hasattr(self, "_status_label"):
             self._status_label.destroy()
 
-        self._status_label = tk.Label(
+        self._status_label = create_rendered_label(
             self.center_frame,
             text=message,
-            font=FONTS["status"],
-            fg=colors["text_light"] if color != colors["success_bg"] else "#006400",
-            bg=color,
-            padx=10,
-            pady=4,
-            bd=1,
-            relief="solid",
+            font_size=10,
+            fg_color=(
+                colors["text_light"] if color != colors["success_bg"] else "#006400"
+            ),
+            bg_color=color,
+            bold=True,
         )
         self._status_label.pack(pady=(8, 0))
 
@@ -230,31 +231,28 @@ class DevModeApp:
         btn_text = "Update" if is_edit else "Save Preset"
 
         # Banner
-        tk.Label(
+        lbl_banner = create_rendered_label(
             self.center_frame,
             text=banner_text,
-            font=FONTS["banner"],
-            fg=colors["yellow"],
-            bg=colors["bg"],
-            pady=8,
-            bd=2,
-            relief="solid",
-            highlightbackground=colors["text_light"],
-            highlightcolor=colors["text_light"],
-            highlightthickness=2,
-        ).pack(pady=(10, 14), fill="x", padx=40)
+            font_size=13,
+            fg_color=colors["yellow"],
+            bg_color=colors["bg"],
+            bold=True,
+        )
+        lbl_banner.pack(pady=(10, 14), fill="x", padx=40)
 
         # Campo nome
         frame = tk.Frame(self.center_frame, bg=colors["bg"])
         frame.pack(pady=(0, 10))
 
-        tk.Label(
+        lbl_preset_name = create_rendered_label(
             frame,
             text="Preset name:",
-            font=FONTS["default"],
-            fg=colors["accent"],
-            bg=colors["bg"],
-        ).pack(side="left", padx=(0, 10))
+            font_size=12,
+            fg_color=colors["accent"],
+            bg_color=colors["bg"],
+        )
+        lbl_preset_name.pack(side="left", padx=(0, 10))
 
         entry = tk.Entry(
             frame,
@@ -264,12 +262,13 @@ class DevModeApp:
         )
         entry.pack(side="left")
 
-        warning_label = tk.Label(
+        warning_label = create_rendered_label(
             self.center_frame,
             text="",
-            font=FONTS["warning"],
-            fg=colors["warning"],
-            bg=colors["bg"],
+            font_size=10,
+            fg_color=colors["warning"],
+            bg_color=colors["bg"],
+            bold=True,
         )
         warning_label.pack()
 
@@ -277,13 +276,14 @@ class DevModeApp:
         ide_frame = tk.Frame(self.center_frame, bg=colors["bg"])
         ide_frame.pack(pady=(0, 10))
 
-        tk.Label(
+        lbl_default_ide = create_rendered_label(
             ide_frame,
             text="Default IDE:",
-            font=FONTS["default"],
-            fg=colors["accent"],
-            bg=colors["bg"],
-        ).pack(side="left", padx=(0, 10))
+            font_size=12,
+            fg_color=colors["accent"],
+            bg_color=colors["bg"],
+        )
+        lbl_default_ide.pack(side="left", padx=(0, 10))
 
         ides_list = ["-- Select IDE --"] + detect_ides()
         ide_var = tk.StringVar(value="-- Select IDE --")
@@ -301,13 +301,14 @@ class DevModeApp:
         music_frame = tk.Frame(self.center_frame, bg=colors["bg"])
         music_frame.pack(pady=(0, 10))
 
-        tk.Label(
+        lbl_playlist = create_rendered_label(
             music_frame,
             text="Playlist:",
-            font=FONTS["default"],
-            fg=colors["accent"],
-            bg=colors["bg"],
-        ).pack(side="left", padx=(0, 10))
+            font_size=12,
+            fg_color=colors["accent"],
+            bg_color=colors["bg"],
+        )
+        lbl_playlist.pack(side="left", padx=(0, 10))
 
         music_apps = detect_music_apps()
         playlist_options = music_apps + ["Custom URL"]
@@ -326,12 +327,12 @@ class DevModeApp:
 
         # Campo URL (aparece logo embaixo quando Custom URL é selecionado)
         url_container = tk.Frame(self.center_frame, bg=colors["bg"])
-        url_label = tk.Label(
+        url_label = create_rendered_label(
             url_container,
             text="Playlist URL:",
-            font=FONTS["default"],
-            fg=colors["accent"],
-            bg=colors["bg"],
+            font_size=12,
+            fg_color=colors["accent"],
+            bg_color=colors["bg"],
         )
         url_label.pack(side="left", padx=(0, 10))
         url_entry = tk.Entry(
@@ -352,13 +353,14 @@ class DevModeApp:
         brightness_frame = tk.Frame(self.center_frame, bg=colors["bg"])
         brightness_frame.pack(pady=(0, 10))
 
-        tk.Label(
+        lbl_brightness = create_rendered_label(
             brightness_frame,
             text="Brightness:",
-            font=FONTS["default"],
-            fg=colors["accent"],
-            bg=colors["bg"],
-        ).pack(side="left", padx=(0, 10))
+            font_size=12,
+            fg_color=colors["accent"],
+            bg_color=colors["bg"],
+        )
+        lbl_brightness.pack(side="left", padx=(0, 10))
 
         brightness_var = tk.IntVar(value=100)
         brightness_scale = tk.Scale(
@@ -410,16 +412,35 @@ class DevModeApp:
             name = entry.get().strip()
             if not name:
                 entry.config(bg=colors["error_bg"])
-                warning_label.config(
-                    text="Please fill in the Preset name before saving."
+                update_rendered_label(
+                    warning_label,
+                    text="Please fill in the Preset name before saving.",
+                    font_size=10,
+                    fg_color=colors["warning"],
+                    bg_color=colors["bg"],
+                    bold=True,
                 )
                 return
 
             selected_ide = ide_var.get()
             if selected_ide == "-- Select IDE --":
-                warning_label.config(text="Please select a Default IDE.")
+                update_rendered_label(
+                    warning_label,
+                    text="Please select a Default IDE.",
+                    font_size=10,
+                    fg_color=colors["warning"],
+                    bg_color=colors["bg"],
+                    bold=True,
+                )
                 return
-            warning_label.config(text="")
+            update_rendered_label(
+                warning_label,
+                text="",
+                font_size=10,
+                fg_color=colors["warning"],
+                bg_color=colors["bg"],
+                bold=True,
+            )
 
             playlist = playlist_var.get()
             if playlist == "Custom URL":
@@ -430,7 +451,14 @@ class DevModeApp:
                     original_name, name, ide_var.get(), playlist, brightness_var.get()
                 )
                 if not success:
-                    warning_label.config(text="A preset with this name already exists.")
+                    update_rendered_label(
+                        warning_label,
+                        text="A preset with this name already exists.",
+                        font_size=10,
+                        fg_color=colors["warning"],
+                        bg_color=colors["bg"],
+                        bold=True,
+                    )
                     return
             else:
                 add_preset(name, ide_var.get(), playlist, brightness_var.get())
