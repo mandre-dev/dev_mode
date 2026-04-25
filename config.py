@@ -27,6 +27,16 @@ colors = {
     "success_bg": "#D2FFD2",
 }
 
+# Fontes
+FONTS = {
+    "title": ("Press Start 2P", 18),
+    "default": ("DotGothic16", 12),
+    "default_bold": ("DotGothic16", 12, "bold"),
+    "banner": ("DotGothic16", 13, "bold"),
+    "status": ("DotGothic16", 10, "bold"),
+    "warning": ("DotGothic16", 10, "bold"),
+}
+
 # Caminho do arquivo de presets
 PRESETS_FILE = os.path.join(os.path.expanduser("~"), ".dev_mode_presets.json")
 

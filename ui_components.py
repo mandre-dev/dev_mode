@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from tkinter import PhotoImage
-from config import ICON_TARGET_SIZE, colors
+from config import ICON_TARGET_SIZE, colors, FONTS
 
 
 class ToolTip:
@@ -26,7 +26,7 @@ class ToolTip:
         label = tk.Label(
             tw,
             text=self.text,
-            font=("Arial", 9),
+            font=FONTS["default"],
             fg=colors["text_light"],
             bg=colors["text_dark"],
             bd=1,
@@ -95,7 +95,7 @@ def create_shadow_button(parent, width, height, text, click_command=None):
         width // 2 + 1,
         height // 2 + 1,
         text=text,
-        font=("Arial", 12, "bold"),
+        font=FONTS["default_bold"],
         fill=colors["shadow"],
     )
     # Texto principal
@@ -103,7 +103,7 @@ def create_shadow_button(parent, width, height, text, click_command=None):
         width // 2,
         height // 2,
         text=text,
-        font=("Arial", 12, "bold"),
+        font=FONTS["default_bold"],
         fill=colors["yellow"],
     )
 

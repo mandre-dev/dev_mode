@@ -3,7 +3,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from config import colors, WINDOW_WIDTH, WINDOW_HEIGHT
+from config import colors, FONTS, WINDOW_WIDTH, WINDOW_HEIGHT
 from presets_manager import (
     load_presets,
     save_presets,
@@ -108,7 +108,7 @@ class DevModeApp:
         tk.Label(
             row,
             text="Preset:",
-            font=("Arial", 12),
+            font=FONTS["default"],
             fg=colors["accent"],
             bg=colors["bg"],
         ).pack(side="left", padx=(0, 10))
@@ -117,7 +117,7 @@ class DevModeApp:
             row,
             values=get_preset_names(),
             state="readonly",
-            font=("Arial", 12),
+            font=FONTS["default"],
             width=18,
         )
         self.combo.set("")
@@ -201,7 +201,7 @@ class DevModeApp:
         self._status_label = tk.Label(
             self.center_frame,
             text=message,
-            font=("Arial", 10, "bold"),
+            font=FONTS["status"],
             fg=colors["text_light"] if color != colors["success_bg"] else "#006400",
             bg=color,
             padx=10,
@@ -233,7 +233,7 @@ class DevModeApp:
         tk.Label(
             self.center_frame,
             text=banner_text,
-            font=("Arial", 13, "bold"),
+            font=FONTS["banner"],
             fg=colors["yellow"],
             bg=colors["bg"],
             pady=8,
@@ -251,14 +251,14 @@ class DevModeApp:
         tk.Label(
             frame,
             text="Preset name:",
-            font=("Arial", 12),
+            font=FONTS["default"],
             fg=colors["accent"],
             bg=colors["bg"],
         ).pack(side="left", padx=(0, 10))
 
         entry = tk.Entry(
             frame,
-            font=("Arial", 12),
+            font=FONTS["default"],
             width=18,
             bg=colors["text_light"],
         )
@@ -267,7 +267,7 @@ class DevModeApp:
         warning_label = tk.Label(
             self.center_frame,
             text="",
-            font=("Arial", 10, "bold"),
+            font=FONTS["warning"],
             fg=colors["warning"],
             bg=colors["bg"],
         )
@@ -280,7 +280,7 @@ class DevModeApp:
         tk.Label(
             ide_frame,
             text="Default IDE:",
-            font=("Arial", 12),
+            font=FONTS["default"],
             fg=colors["accent"],
             bg=colors["bg"],
         ).pack(side="left", padx=(0, 10))
@@ -291,7 +291,7 @@ class DevModeApp:
             ide_frame,
             values=ides_list,
             state="readonly",
-            font=("Arial", 12),
+            font=FONTS["default"],
             width=18,
             textvariable=ide_var,
         )
@@ -304,7 +304,7 @@ class DevModeApp:
         tk.Label(
             music_frame,
             text="Playlist:",
-            font=("Arial", 12),
+            font=FONTS["default"],
             fg=colors["accent"],
             bg=colors["bg"],
         ).pack(side="left", padx=(0, 10))
@@ -318,7 +318,7 @@ class DevModeApp:
             music_frame,
             values=playlist_options,
             state="readonly",
-            font=("Arial", 12),
+            font=FONTS["default"],
             width=18,
             textvariable=playlist_var,
         )
@@ -329,13 +329,13 @@ class DevModeApp:
         url_label = tk.Label(
             url_container,
             text="Playlist URL:",
-            font=("Arial", 12),
+            font=FONTS["default"],
             fg=colors["accent"],
             bg=colors["bg"],
         )
         url_label.pack(side="left", padx=(0, 10))
         url_entry = tk.Entry(
-            url_container, font=("Arial", 12), width=22, bg=colors["text_light"]
+            url_container, font=FONTS["default"], width=22, bg=colors["text_light"]
         )
         url_entry.pack(side="left")
 
@@ -355,7 +355,7 @@ class DevModeApp:
         tk.Label(
             brightness_frame,
             text="Brightness:",
-            font=("Arial", 12),
+            font=FONTS["default"],
             fg=colors["accent"],
             bg=colors["bg"],
         ).pack(side="left", padx=(0, 10))
@@ -458,7 +458,7 @@ class DevModeApp:
         clean_btn = tk.Button(
             btns_frame,
             text="Clean",
-            font=("Arial", 12, "bold"),
+            font=FONTS["default_bold"],
             fg=colors["yellow"],
             bg=colors["btn_clean"],
             activebackground=colors["btn_clean_active"],
@@ -472,7 +472,7 @@ class DevModeApp:
         cancel_btn = tk.Button(
             btns_frame,
             text="Cancel",
-            font=("Arial", 12, "bold"),
+            font=FONTS["default_bold"],
             fg=colors["yellow"],
             bg=colors["btn_cancel"],
             activebackground=colors["btn_cancel_active"],
