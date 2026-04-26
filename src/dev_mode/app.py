@@ -1,8 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 
-from config import colors, FONTS, WINDOW_WIDTH, WINDOW_HEIGHT
-from presets_manager import (
+from .config import colors, FONTS, WINDOW_WIDTH, WINDOW_HEIGHT
+from .presets_manager import (
     load_presets,
     save_presets,
     get_preset_names,
@@ -11,18 +11,18 @@ from presets_manager import (
     get_preset_by_name,
     update_preset,
 )
-from ide_detector import detect_ides
-from music_detector import detect_music_apps
-from brightness_controller import set_brightness
-from preset_applier import apply_preset
-from ui_components import (
+from .ide_detector import detect_ides
+from .music_detector import detect_music_apps
+from .brightness_controller import set_brightness
+from .preset_applier import apply_preset
+from .ui_components import (
     ToolTip,
     create_icon_button,
     create_shadow_button,
     attach_hover_animation_button,
 )
-from font_renderer import render_text_image, get_font_path, _pil_to_photoimage
-from label_renderer import create_rendered_label, update_rendered_label
+from .font_renderer import render_text_image, get_font_path, _pil_to_photoimage
+from .label_renderer import create_rendered_label, update_rendered_label
 
 
 class DevModeApp:

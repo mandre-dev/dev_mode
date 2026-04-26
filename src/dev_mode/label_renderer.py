@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from PIL import Image, ImageDraw, ImageFont
-from font_renderer import get_font_path, _pil_to_photoimage
+from .font_renderer import get_font_path, _pil_to_photoimage
 
 
 # Cache de imagens de label para evitar recriação

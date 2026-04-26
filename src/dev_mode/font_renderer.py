@@ -5,6 +5,7 @@ import io
 import base64
 import tkinter as tk
 from PIL import Image, ImageDraw, ImageFont
+from .resources import resource_path
 
 
 def _pil_to_photoimage(pil_img):
@@ -59,5 +60,4 @@ def render_text_image(text, font_path, font_size, color, bg_color=None):
 
 def get_font_path(filename):
     """Retorna o caminho completo para um arquivo de fonte no diretório fonts/."""
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(base_dir, "fonts", filename)
+    return resource_path("fonts", filename)

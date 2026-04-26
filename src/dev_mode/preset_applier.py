@@ -2,9 +2,9 @@
 
 import subprocess
 
-from ide_detector import get_ide_command
-from music_detector import open_playlist
-from brightness_controller import set_brightness
+from .ide_detector import get_ide_command
+from .music_detector import open_playlist
+from .brightness_controller import set_brightness
 
 
 def apply_preset(preset_data):

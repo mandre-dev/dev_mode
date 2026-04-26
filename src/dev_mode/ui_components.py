@@ -2,7 +2,8 @@
 
 import tkinter as tk
 from tkinter import PhotoImage
-from config import ICON_TARGET_SIZE, colors, FONTS
+from .config import ICON_TARGET_SIZE, colors, FONTS
+from .resources import resource_path
 
 
 def _hex_to_rgb(value: str):
@@ -205,7 +206,14 @@ class ToolTip:
 def load_icon(path):
     """Carrega uma imagem PNG e a redimensiona proporcionalmente."""
     try:
-        icon = PhotoImage(file=path)
+        # Permite passar apenas o nome do arquivo (ex.: "editar.png").
+        # Resolve automaticamente para `assets/` dentro do pacote.
+        icon_path = path if isinstance(path, str) else str(path)
+        # Se o caller passar só "editar.png", resolve em assets/.
+        # Se passar um path com separador, assume que já é um caminho.
+        if "/" not in icon_path and "\\" not in icon_path:
+            icon_path = resource_path("assets", icon_path)
+        icon = PhotoImage(file=icon_path)
         factor = max(1, icon.width() // ICON_TARGET_SIZE)
         if factor > 1:
             icon = icon.subsample(factor, factor)

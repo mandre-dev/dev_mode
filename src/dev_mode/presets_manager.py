@@ -2,7 +2,7 @@
 
 import json
 import os
-from config import PRESETS_FILE
+from .config import PRESETS_FILE
 
 
 def load_presets():
