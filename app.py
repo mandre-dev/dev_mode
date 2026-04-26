@@ -15,7 +15,12 @@ from ide_detector import detect_ides
 from music_detector import detect_music_apps
 from brightness_controller import set_brightness
 from preset_applier import apply_preset
-from ui_components import ToolTip, create_icon_button, create_shadow_button
+from ui_components import (
+    ToolTip,
+    create_icon_button,
+    create_shadow_button,
+    attach_hover_animation_button,
+)
 from font_renderer import render_text_image, get_font_path, _pil_to_photoimage
 from label_renderer import create_rendered_label, update_rendered_label
 
@@ -320,9 +325,8 @@ class DevModeApp:
 
         music_apps = detect_music_apps()
         playlist_options = music_apps + ["Custom URL"]
-        playlist_var = tk.StringVar(
-            value=playlist_options[0] if playlist_options else "Custom URL"
-        )
+        # Começa sem seleção; o usuário precisa escolher.
+        playlist_var = tk.StringVar(value="")
         playlist_combo = ttk.Combobox(
             music_frame,
             values=playlist_options,
@@ -331,6 +335,7 @@ class DevModeApp:
             width=18,
             textvariable=playlist_var,
         )
+        playlist_combo.set("")
         playlist_combo.pack(side="left")
 
         # Campo URL (aparece logo embaixo quando Custom URL é selecionado)
@@ -405,10 +410,13 @@ class DevModeApp:
             if playlist_val in playlist_options:
                 playlist_var.set(playlist_val)
             else:
-                # Assume que é uma URL customizada
-                playlist_var.set("Custom URL")
-                url_entry.delete(0, tk.END)
-                url_entry.insert(0, playlist_val)
+                # Se tiver conteúdo, assume que é uma URL customizada; senão, mantém vazio.
+                if playlist_val:
+                    playlist_var.set("Custom URL")
+                    url_entry.delete(0, tk.END)
+                    url_entry.insert(0, playlist_val)
+                else:
+                    playlist_var.set("")
             toggle_url_field()
 
             brightness_val = preset_data.get("brightness", 100)
@@ -505,6 +513,13 @@ class DevModeApp:
             command=do_clean,
             width=8,
         )
+        attach_hover_animation_button(
+            clean_btn,
+            normal_bg=colors["btn_clean"],
+            hover_bg=colors["btn_clean_active"],
+            normal_fg=colors["yellow"],
+            hover_fg=colors["yellow_hover"],
+        )
         clean_btn.pack(side="left", padx=(0, 8))
 
         cancel_btn = tk.Button(
@@ -518,6 +533,13 @@ class DevModeApp:
             cursor="hand2",
             command=self._build_main_screen,
             width=8,
+        )
+        attach_hover_animation_button(
+            cancel_btn,
+            normal_bg=colors["btn_cancel"],
+            hover_bg=colors["btn_cancel_active"],
+            normal_fg=colors["yellow"],
+            hover_fg=colors["yellow_hover"],
         )
         cancel_btn.pack(side="left")
 
