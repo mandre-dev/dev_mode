@@ -359,7 +359,7 @@ class DevModeApp:
 
         # Brilho do monitor
         brightness_frame = tk.Frame(self.center_frame, bg=colors["bg"])
-        brightness_frame.pack(pady=(0, 10))
+        brightness_frame.pack(pady=(0, 30))
 
         lbl_brightness = create_rendered_label(
             brightness_frame,
@@ -368,7 +368,8 @@ class DevModeApp:
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
-        lbl_brightness.pack(side="left", padx=(0, 10))
+        # Alinha visualmente com o `Scale` (evita usar padding negativo no grid).
+        lbl_brightness.grid(row=0, column=0, padx=(0, 10), pady=(25, 0), sticky="w")
 
         brightness_var = tk.IntVar(value=100)
         brightness_scale = tk.Scale(
@@ -385,7 +386,8 @@ class DevModeApp:
             activebackground=colors["accent"],
             showvalue=True,
         )
-        brightness_scale.pack(side="left", pady=(3, 0))
+        brightness_scale.grid(row=0, column=1, sticky="w")
+        brightness_frame.grid_columnconfigure(1, weight=1)
 
         # Preenche campos se estiver em modo de edição
         original_name = ""
