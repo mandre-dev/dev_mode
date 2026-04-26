@@ -358,7 +358,7 @@ class DevModeApp:
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
-        lbl_brightness.pack(side="left", padx=(0, 10))
+        lbl_brightness.grid(row=0, column=0, padx=(0, 10))
 
         brightness_var = tk.IntVar(value=100)
         brightness_scale = tk.Scale(
@@ -375,8 +375,10 @@ class DevModeApp:
             activebackground=colors["accent"],
             showvalue=True,
         )
-        # pady negativo sobe o slider para alinhar com o label
-        brightness_scale.pack(side="left", pady=(0, 4))
+        brightness_scale.grid(row=0, column=1)
+
+        # Centraliza verticalmente os widgets na linha
+        brightness_frame.grid_rowconfigure(0, weight=1)
 
         # Preenche campos se estiver em modo de edição
         original_name = ""
