@@ -358,7 +358,7 @@ class DevModeApp:
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
-        lbl_brightness.place(relx=0, rely=0.5, anchor="w")
+        lbl_brightness.pack(side="left", padx=(0, 10))
 
         brightness_var = tk.IntVar(value=100)
         brightness_scale = tk.Scale(
@@ -375,13 +375,8 @@ class DevModeApp:
             activebackground=colors["accent"],
             showvalue=True,
         )
-        brightness_scale.place(relx=1, rely=0.5, anchor="e")
-
-        # Define altura fixa do frame baseada no maior widget
-        brightness_frame.update_idletasks()
-        scale_height = brightness_scale.winfo_reqheight()
-        brightness_frame.config(height=scale_height)
-        brightness_frame.pack_propagate(False)
+        # pady negativo sobe o slider para alinhar com o label
+        brightness_scale.pack(side="left", pady=(0, 4))
 
         # Preenche campos se estiver em modo de edição
         original_name = ""
