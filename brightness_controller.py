@@ -1,11 +1,19 @@
-"""Controle de brilho do monitor via xrandr."""
+"""Controle de brilho do monitor.
 
-import subprocess
+- Linux: tenta via `xrandr --brightness` (X11).
+- Windows: tenta via PowerShell/WMI (monitores internos/compatíveis).
+
+Observação: em alguns ambientes (Wayland, monitores externos, drivers específicos),
+ajuste de brilho pode não estar disponível; nesses casos, a função falha em silêncio.
+"""
+
+import platform
 import re
+import subprocess
 
 
-def get_displays():
-    """Retorna a lista de displays conectados."""
+def _linux_get_displays():
+    """Retorna a lista de displays conectados (Linux/X11 via xrandr)."""
     try:
         output = subprocess.check_output(["xrandr"], text=True)
         displays = []
@@ -14,15 +22,15 @@ def get_displays():
                 match = re.match(r"(\S+)\s+connected", line)
                 if match:
                     displays.append(match.group(1))
-        return displays if displays else ["default"]
+        return displays
     except Exception:
-        return ["default"]
+        return []
 
 
-def set_brightness(percent):
-    """Define o brilho do monitor (0-100%)."""
-    value = max(10, min(100, percent)) / 100.0
-    displays = get_displays()
+def _linux_set_brightness(percent):
+    """Define brilho (0-100%) via xrandr (Linux/X11)."""
+    value = max(10, min(100, int(percent))) / 100.0
+    displays = _linux_get_displays()
     for display in displays:
         try:
             subprocess.run(
@@ -33,3 +41,35 @@ def set_brightness(percent):
             )
         except Exception:
             pass
+
+
+def _windows_set_brightness(percent):
+    """Define brilho (0-100%) via PowerShell/WMI (Windows)."""
+    value = max(0, min(100, int(percent)))
+    ps = (
+        "$b=%d;"
+        "(Get-WmiObject -Namespace root/WMI -Class WmiMonitorBrightnessMethods)"
+        " | ForEach-Object { try { $_.WmiSetBrightness(1,$b) | Out-Null } catch {} }"
+    ) % value
+    try:
+        subprocess.run(
+            ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", ps],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except Exception:
+        pass
+
+
+def set_brightness(percent):
+    """Define o brilho do monitor (0-100%), quando suportado pelo SO."""
+    system = platform.system()
+    if system == "Windows":
+        _windows_set_brightness(percent)
+        return
+    if system == "Linux":
+        _linux_set_brightness(percent)
+        return
+    # macOS e outros: não suportado aqui (no-op)
+    return

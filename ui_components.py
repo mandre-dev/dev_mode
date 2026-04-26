@@ -87,7 +87,8 @@ def create_shadow_button(parent, width, height, text, click_command=None):
         width=width,
         height=height,
         bg=colors["apply_bg"],
-        highlightthickness=0,
+        highlightthickness=1,
+        highlightbackground=colors["text_light"],
         cursor="hand2",
     )
     # Sombra
@@ -96,7 +97,7 @@ def create_shadow_button(parent, width, height, text, click_command=None):
         height // 2 + 1,
         text=text,
         font=FONTS["default_bold"],
-        fill=colors["shadow"],
+        fill="#000000",
     )
     # Texto principal
     text_id = canvas.create_text(
@@ -109,12 +110,12 @@ def create_shadow_button(parent, width, height, text, click_command=None):
 
     def on_enter(event):
         canvas.config(bg=colors["apply_bg_hover"])
-        canvas.itemconfig(shadow_id, fill=colors["shadow_hover"])
+        canvas.itemconfig(shadow_id, fill="#000000")
         canvas.itemconfig(text_id, fill=colors["yellow_hover"])
 
     def on_leave(event):
         canvas.config(bg=colors["apply_bg"])
-        canvas.itemconfig(shadow_id, fill=colors["shadow"])
+        canvas.itemconfig(shadow_id, fill="#000000")
         canvas.itemconfig(text_id, fill=colors["yellow"])
 
     def on_click(event):

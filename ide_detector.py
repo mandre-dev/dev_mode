@@ -1,7 +1,8 @@
 """Detecção de IDEs instaladas no sistema."""
 
 import os
-import subprocess
+import platform
+import shutil
 
 # Lista de comandos e nomes de IDEs populares
 IDE_COMMANDS = [
@@ -62,18 +63,45 @@ EXTRA_PATHS = [
 def _is_command_available(cmd):
     """Verifica se um comando existe no PATH."""
     try:
-        result = subprocess.run(
-            ["which", cmd],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
-        )
-        return result.returncode == 0
+        return shutil.which(cmd) is not None
     except Exception:
         return False
 
 
 def _find_in_extra_paths(cmd):
     """Procura o executável em caminhos alternativos comuns."""
+    # Windows: além do PATH, tenta locais comuns de instalação
+    if platform.system() == "Windows":
+        candidates = []
+        program_files = os.environ.get("ProgramFiles")
+        program_files_x86 = os.environ.get("ProgramFiles(x86)")
+        local_appdata = os.environ.get("LOCALAPPDATA")
+        user_profile = os.environ.get("USERPROFILE")
+
+        # Alguns apps (VS Code / Cursor) costumam instalar aqui.
+        for base in (local_appdata, program_files, program_files_x86, user_profile):
+            if not base:
+                continue
+            candidates.extend(
+                [
+                    os.path.join(base, "Programs", "Microsoft VS Code", "Code.exe"),
+                    os.path.join(base, "Microsoft VS Code", "Code.exe"),
+                    os.path.join(base, "Programs", "Cursor", "Cursor.exe"),
+                    os.path.join(base, "Cursor", "Cursor.exe"),
+                ]
+            )
+
+        # Se o "cmd" já for um .exe conhecido, tenta localizar diretamente.
+        if cmd.lower().endswith(".exe"):
+            candidates.append(cmd)
+
+        for p in candidates:
+            try:
+                if p and os.path.isfile(p):
+                    return True
+            except Exception:
+                continue
+
     for base in EXTRA_PATHS:
         if not os.path.exists(base):
             continue

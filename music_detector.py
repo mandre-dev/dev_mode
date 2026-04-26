@@ -1,6 +1,7 @@
 """Detecção de apps de música instalados no sistema."""
 
 import subprocess
+import shutil
 import webbrowser
 
 MUSIC_COMMANDS = [
@@ -21,12 +22,11 @@ def detect_music_apps():
     """Detecta apps de música instalados."""
     apps = []
     for cmd, name in MUSIC_COMMANDS:
-        if (
-            subprocess.call(
-                ["which", cmd], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-            )
-            == 0
-        ):
+        try:
+            found = shutil.which(cmd) is not None
+        except Exception:
+            found = False
+        if found:
             apps.append(name)
     return apps if apps else []
 
