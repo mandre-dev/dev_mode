@@ -368,7 +368,7 @@ class DevModeApp:
             fg_color=colors["accent"],
             bg_color=colors["bg"],
         )
-        lbl_brightness.grid(row=0, column=0, padx=(0, 10))
+        lbl_brightness.pack(side="left", padx=(0, 10))
 
         brightness_var = tk.IntVar(value=100)
         brightness_scale = tk.Scale(
@@ -385,10 +385,19 @@ class DevModeApp:
             activebackground=colors["accent"],
             showvalue=True,
         )
-        brightness_scale.grid(row=0, column=1)
+        brightness_scale.pack(side="left")
 
-        # Centraliza verticalmente os widgets na linha
-        brightness_frame.grid_rowconfigure(0, weight=1)
+        # Centraliza verticalmente: calcula altura e reposiciona com place
+        brightness_frame.update_idletasks()
+        frame_height = brightness_frame.winfo_height()
+        lbl_brightness.pack_forget()
+        brightness_scale.pack_forget()
+        brightness_frame.config(height=frame_height)
+        brightness_frame.pack_propagate(False)
+        lbl_brightness.place(x=0, y=frame_height // 2, anchor="w")
+        brightness_scale.place(
+            x=lbl_brightness.winfo_reqwidth() + 15, y=frame_height // 2, anchor="w"
+        )
 
         # Preenche campos se estiver em modo de edição
         original_name = ""
