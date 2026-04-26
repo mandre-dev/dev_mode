@@ -156,6 +156,16 @@ class DevModeApp:
         )
         apply_btn.pack(pady=(10, 0))
 
+        # Footer
+        self.footer_label = create_rendered_label(
+            self.center_frame,
+            text="Developed by Marcos André © 2026",
+            font_size=10,
+            fg_color="#808080",
+            bg_color=colors["bg"],
+        )
+        self.footer_label.pack(pady=(30, 0))
+
     def _on_delete(self):
         """Exclui o preset selecionado."""
         selected = self.combo.get()
