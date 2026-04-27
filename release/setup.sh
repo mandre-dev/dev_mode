@@ -3,7 +3,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-DESKTOP_FILE="$SCRIPT_DIR/Dev Mode.desktop"
+DESKTOP_FILE="$SCRIPT_DIR/Dev_Mode.desktop"
 
 echo "⚙️  Configurando Dev Mode..."
 
@@ -26,9 +26,9 @@ DESKTOP
 
 chmod +x "$DESKTOP_FILE"
 
-# Marca como confiável para o GNOME (evita o aviso de segurança)
+# Marca como confiável para o GNOME
 gio set "$DESKTOP_FILE" metadata::trusted true 2>/dev/null && \
     echo "✅ Marcado como confiável no GNOME." || \
     echo "⚠️  Não foi possível marcar como confiável automaticamente."
 
-echo "✅ Pronto! Agora dê duplo clique em 'Dev Mode.desktop' para abrir o Dev Mode."
+echo "✅ Pronto! Agora dê duplo clique em 'Dev_Mode.desktop' para abrir o Dev Mode."
