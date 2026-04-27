@@ -128,7 +128,6 @@ dev_mode/
 
 ---
 
-
 ## Como Instalar e Rodar com dev_mode.desktop (Linux)
 
 O jeito mais fácil é baixar os arquivos `dev_mode.desktop`, `dev_mode.AppImage` e `dev_mode.png` (ícone) da pasta `release/` ou da página de Releases do projeto e colocá-los na mesma pasta.

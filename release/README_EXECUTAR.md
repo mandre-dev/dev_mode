@@ -1,27 +1,26 @@
-# Como executar o Dev_Mode baixando o dev_mode.desktop
+# Como executar o Dev_Mode
 
-1. **Baixe os arquivos**
-   - `dev_mode.desktop`
-   - `dev_mode.AppImage`
-   - `dev_mode.png`
-   
-   (Disponíveis na pasta `release/` ou na página de Releases do GitHub)
+## Arquivos necessários (na mesma pasta)
 
-2. **Coloque todos na mesma pasta**
+- `dev_mode.AppImage`
+- `dev_mode.desktop`
+- `launch_dev_mode.sh`
+- `dev_mode.png`
 
-3. **Dê permissão de execução**
-   Abra o terminal na pasta onde estão os arquivos e rode:
+## Passos
+
+1. **Baixe todos os arquivos** e coloque-os na **mesma pasta**.
+
+2. **Dê permissão de execução** (abra o terminal na pasta e rode):
    ```bash
-   chmod +x dev_mode.desktop dev_mode.AppImage
+   chmod +x dev_mode.AppImage launch_dev_mode.sh dev_mode.desktop
    ```
 
-4. **Execute com duplo clique**
-   Dê duplo clique no `dev_mode.desktop`.
-   
-   Se aparecer um aviso de segurança, clique com o botão direito, vá em "Propriedades" e marque como confiável.
+3. **Duplo clique** no `dev_mode.desktop`.
+   - Se aparecer aviso de segurança, clique com botão direito → **Propriedades** → marque como confiável, depois abra.
 
-Pronto! O Dev_Mode será iniciado sem precisar instalar Python ou dependências.
+Pronto! O Dev Mode vai iniciar sem precisar instalar Python ou dependências.
 
 ---
 
-> **Dica:** Você pode mover o `dev_mode.desktop` para sua área de trabalho para facilitar o acesso.
+> **Dica:** Você pode mover a pasta inteira para qualquer lugar — ela é portável. O atalho funciona de qualquer diretório, desde que os 4 arquivos estejam juntos.

@@ -1,0 +1,4 @@
+include README.md
+include run_dev_mode.py
+recursive-include src/dev_mode/assets *
+recursive-include src/dev_mode/fonts *

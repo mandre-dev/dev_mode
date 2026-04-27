@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Dev_Mode
+Exec=dev_mode
+Icon=appicon
+Categories=Utility;

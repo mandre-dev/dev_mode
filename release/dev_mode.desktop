@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=Dev Mode
 Comment=Apply development presets: IDE, music and brightness
-Exec=./dev_mode.AppImage
-Icon=./dev_mode.png
+Exec=bash -c 'cd "$(dirname "%k")" && ./dev_mode.AppImage'
+Icon=/home/$USER/dev_mode.png
 Type=Application
 Categories=Development;Utility;
 Terminal=false

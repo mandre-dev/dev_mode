@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dev-mode"
+version = "0.1.0"
+description = "Dev_Mode: presets to open IDE, music and adjust brightness."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "pillow",
+]
+
+[project.scripts]
+dev-mode = "dev_mode.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+dev_mode = ["assets/*", "fonts/*"]
