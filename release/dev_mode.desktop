@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Dev Mode
+Comment=Apply development presets: IDE, music and brightness
+Exec=./dev_mode.AppImage
+Icon=./dev_mode.png
+Type=Application
+Categories=Development;Utility;
+Terminal=false
+StartupNotify=true

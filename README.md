@@ -128,23 +128,23 @@ dev_mode/
 
 ---
 
-## Como Instalar no Linux (AppImage)
 
-O método mais simples para rodar o Dev_Mode no Linux é usando o arquivo AppImage já pronto, disponível na pasta `release/` deste repositório ou na área de Releases do GitHub.
+## Como Instalar e Rodar com dev_mode.desktop (Linux)
+
+O jeito mais fácil é baixar os arquivos `dev_mode.desktop`, `dev_mode.AppImage` e `dev_mode.png` (ícone) da pasta `release/` ou da página de Releases do projeto e colocá-los na mesma pasta.
 
 ### Passos:
 
-1. Baixe o arquivo `dev_mode.AppImage` da pasta `release/` ou da página de Releases do projeto.
-2. Dê permissão de execução:
+1. Baixe os arquivos `dev_mode.desktop`, `dev_mode.AppImage` e `dev_mode.png`.
+2. Dê permissão de execução ao `.desktop` e ao AppImage:
    ```bash
-   chmod +x dev_mode.AppImage
+   chmod +x dev_mode.desktop dev_mode.AppImage
    ```
-3. Execute com duplo clique ou pelo terminal:
-   ```bash
-   ./dev_mode.AppImage
-   ```
+3. Dê duplo clique no `dev_mode.desktop` para rodar o Dev_Mode!
 
-Pronto! Não é necessário instalar Python, dependências ou compilar nada.
+Se aparecer um aviso de segurança, clique com o botão direito, vá em "Propriedades" e marque como confiável.
+
+Pronto! Não precisa instalar Python nem dependências.
 
 ---
 
