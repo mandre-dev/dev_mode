@@ -11,7 +11,7 @@ echo "⚙️  Configurando Dev Mode..."
 chmod +x "$SCRIPT_DIR/dev_mode"
 chmod +x "$SCRIPT_DIR/launch_dev_mode.sh"
 
-# Cria o .desktop com caminhos absolutos (usando aspas para evitar erro com espaços)
+# Cria o .desktop com caminhos absolutos
 cat > "$DESKTOP_FILE" <<DESKTOP
 [Desktop Entry]
 Name=Dev Mode
@@ -22,6 +22,7 @@ Type=Application
 Categories=Development;Utility;
 Terminal=false
 StartupNotify=true
+StartupWMClass=tk
 DESKTOP
 
 chmod +x "$DESKTOP_FILE"
