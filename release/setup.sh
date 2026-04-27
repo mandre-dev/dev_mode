@@ -11,13 +11,13 @@ echo "⚙️  Configurando Dev Mode..."
 chmod +x "$SCRIPT_DIR/dev_mode"
 chmod +x "$SCRIPT_DIR/launch_dev_mode.sh"
 
-# Cria o .desktop com caminhos absolutos
+# Cria o .desktop com caminhos absolutos (usando aspas para evitar erro com espaços)
 cat > "$DESKTOP_FILE" <<DESKTOP
 [Desktop Entry]
 Name=Dev Mode
 Comment=Apply development presets: IDE, music and brightness
-Exec=$SCRIPT_DIR/launch_dev_mode.sh
-Icon=$SCRIPT_DIR/dev-mode.png
+Exec="$SCRIPT_DIR/launch_dev_mode.sh"
+Icon="$SCRIPT_DIR/dev-mode.png"
 Type=Application
 Categories=Development;Utility;
 Terminal=false
@@ -26,9 +26,9 @@ DESKTOP
 
 chmod +x "$DESKTOP_FILE"
 
-# Marca como confiável para o GNOME
+# Marca como confiável para o GNOME/Cinnamon
 gio set "$DESKTOP_FILE" metadata::trusted true 2>/dev/null && \
-    echo "✅ Marcado como confiável no GNOME." || \
-    echo "⚠️  Não foi possível marcar como confiável automaticamente."
+    echo "✅ Marcado como confiável no sistema." || \
+    echo "⚠️  Não foi possível marcar como confiável automaticamente (você pode precisar fazer isso manualmente)."
 
 echo "✅ Pronto! Agora dê duplo clique em 'Dev_Mode.desktop' para abrir o Dev Mode."
