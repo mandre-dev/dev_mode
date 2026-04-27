@@ -17,7 +17,7 @@ cat > "$DESKTOP_FILE" <<DESKTOP
 Name=Dev Mode
 Comment=Apply development presets: IDE, music and brightness
 Exec="$SCRIPT_DIR/launch_dev_mode.sh"
-Icon="$SCRIPT_DIR/dev-mode.png"
+Icon=$SCRIPT_DIR/dev-mode.png
 Type=Application
 Categories=Development;Utility;
 Terminal=false
