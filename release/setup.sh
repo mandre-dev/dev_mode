@@ -3,26 +3,48 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-DESKTOP_FILE="$SCRIPT_DIR/Dev_Mode.desktop"
+DESKTOP_FILE="Dev_Mode.desktop"
+LOCAL_APPS="$HOME/.local/share/applications"
+LOCAL_ICONS="$HOME/.local/share/icons"
 
-echo "⚙️  Configurando Dev Mode..."
+echo "⚙️  Configurando Dev Mode no sistema..."
 
-# Permissões
+# 1. Garante que as pastas do sistema do usuário existam
+mkdir -p "$LOCAL_APPS"
+mkdir -p "$LOCAL_ICONS"
+
+# 2. Permissões nos binários
 chmod +x "$SCRIPT_DIR/dev_mode"
 chmod +x "$SCRIPT_DIR/launch_dev_mode.sh"
 
-# Cria o .desktop com caminhos absolutos
-cat > "$DESKTOP_FILE" <<DESKTOP
+# 3. Copia o ícone para a pasta de ícones do sistema (isso ajuda o painel a achar a imagem)
+cp "$SCRIPT_DIR/dev-mode.png" "$LOCAL_ICONS/dev-mode.png"
+
+# 4. Cria o arquivo .desktop direto na pasta de aplicações do sistema
+cat > "$LOCAL_APPS/$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Name=Dev Mode
-Comment=Apply development presets: IDE, music and brightness
+Comment=Apply development presets
 Exec="$SCRIPT_DIR/launch_dev_mode.sh"
-Icon=$SCRIPT_DIR/dev-mode.png
+Icon=dev-mode
+Type=Application
+Categories=Development;
+Terminal=false
+StartupNotify=true
+StartupWMClass=Dev_Mode
+EOF
+
+# 5. Dá permissão e atualiza o banco de dados de atalhos
+chmod +x "$LOCAL_APPS/$DESKTOP_FILE"
+update-desktop-database "$LOCAL_APPS"
+
+echo "✅ Instalação concluída!"
+echo "👉 Procure por 'Dev Mode' no seu menu de aplicativos (Iniciar) e abra por lá."
 Type=Application
 Categories=Development;Utility;
 Terminal=false
 StartupNotify=true
-StartupWMClass=tk
+StartupWMClass=Tk
 DESKTOP
 
 chmod +x "$DESKTOP_FILE"

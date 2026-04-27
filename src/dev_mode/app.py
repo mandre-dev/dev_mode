@@ -27,10 +27,20 @@ from .label_renderer import create_rendered_label, update_rendered_label
 
 class DevModeApp:
     def __init__(self):
-        self.root = tk.Tk()
+
+        import os
+        self.root = tk.Tk(className="Dev_Mode")
         self.root.title("Dev_Mode")
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
         self.root.configure(bg=colors["bg"])
+
+        # Define o ícone da janela para integração com painel/dock Linux
+        icon_path = os.path.expanduser("~/.local/share/icons/dev-mode.png")
+        if os.path.exists(icon_path):
+            try:
+                self.root.iconphoto(True, tk.PhotoImage(file=icon_path))
+            except Exception as e:
+                print("Erro ao definir ícone da janela:", e)
 
         self.center_frame = tk.Frame(self.root, bg=colors["bg"])
         self.center_frame.pack(expand=True)
