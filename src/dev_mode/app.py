@@ -29,6 +29,7 @@ class DevModeApp:
     def __init__(self):
 
         import os
+
         self.root = tk.Tk(className="Dev_Mode")
         self.root.title("Dev_Mode")
         self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
