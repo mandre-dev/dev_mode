@@ -135,7 +135,9 @@ def detect_ides():
             ides.append(name)
             seen.add(name)
     if platform.system() == "Windows" and not ides:
-        print("[Aviso] Nenhuma IDE detectada automaticamente no Windows. Adicione ao PATH ou instale em local padrão.")
+        print(
+            "[Aviso] Nenhuma IDE detectada automaticamente no Windows. Adicione ao PATH ou instale em local padrão."
+        )
     return ides if ides else ["None found"]
 
 

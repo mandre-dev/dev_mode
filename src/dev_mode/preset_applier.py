@@ -25,6 +25,7 @@ def apply_preset(preset_data):
     # Abre a IDE
     if ide_name and ide_name != "-- Select IDE --":
         cmd = get_ide_command(ide_name)
+        print(f"[DEBUG] Tentando abrir IDE: {cmd}")
         if cmd:
             try:
                 subprocess.Popen(
@@ -36,7 +37,9 @@ def apply_preset(preset_data):
             except Exception as e:
                 print(f"[Aviso] Não foi possível abrir a IDE '{ide_name}': {e}")
         else:
-            print(f"[Aviso] Caminho da IDE '{ide_name}' não encontrado. Verifique se está instalada e no PATH.")
+            print(
+                f"[Aviso] Caminho da IDE '{ide_name}' não encontrado. Verifique se está instalada e no PATH."
+            )
 
     # Abre a playlist / app de música
     if playlist:
