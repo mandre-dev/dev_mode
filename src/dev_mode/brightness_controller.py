@@ -52,14 +52,17 @@ def _windows_set_brightness(percent):
         " | ForEach-Object { try { $_.WmiSetBrightness(1,$b) | Out-Null } catch {} }"
     ) % value
     try:
-        subprocess.run(
+        result = subprocess.run(
             ["powershell", "-NoProfile", "-ExecutionPolicy", "Bypass", "-Command", ps],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
             check=False,
+            text=True,
         )
-    except Exception:
-        pass
+        if result.returncode != 0:
+            print("[Aviso] Não foi possível ajustar o brilho no Windows. Pode ser necessário executar como administrador ou o monitor não é compatível.")
+    except Exception as e:
+        print(f"[Erro] Falha ao tentar ajustar brilho no Windows: {e}")
 
 
 def set_brightness(percent):
@@ -71,5 +74,5 @@ def set_brightness(percent):
     if system == "Linux":
         _linux_set_brightness(percent)
         return
-    # macOS e outros: não suportado aqui (no-op)
+    print("[Aviso] Ajuste de brilho não suportado neste sistema.")
     return

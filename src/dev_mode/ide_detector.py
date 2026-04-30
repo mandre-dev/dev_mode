@@ -78,29 +78,28 @@ def _find_in_extra_paths(cmd):
         local_appdata = os.environ.get("LOCALAPPDATA")
         user_profile = os.environ.get("USERPROFILE")
 
-        # Alguns apps (VS Code / Cursor) costumam instalar aqui.
-        for base in (local_appdata, program_files, program_files_x86, user_profile):
-            if not base:
-                continue
-            candidates.extend(
-                [
-                    os.path.join(base, "Programs", "Microsoft VS Code", "Code.exe"),
-                    os.path.join(base, "Microsoft VS Code", "Code.exe"),
-                    os.path.join(base, "Programs", "Cursor", "Cursor.exe"),
-                    os.path.join(base, "Cursor", "Cursor.exe"),
-                ]
-            )
-
+        # Busca em possíveis subpastas de IDEs
+        ide_dirs = [program_files, program_files_x86, local_appdata, user_profile]
+        subfolders = [
+            "Microsoft VS Code",
+            "JetBrains\\PyCharm Community Edition 2023.1\\bin",
+            "JetBrains\\IntelliJ IDEA Community Edition 2023.1\\bin",
+            "JetBrains\\CLion 2023.1\\bin",
+            "JetBrains\\Rider 2023.1\\bin",
+            "Sublime Text",
+            "AppData\\Local\\Programs\\Microsoft VS Code",
+        ]
+        for base in ide_dirs:
+            if base:
+                for sub in subfolders:
+                    path = os.path.join(base, *sub.split("\\"))
+                    exe = os.path.join(path, f"{cmd}.exe")
+                    if os.path.isfile(exe):
+                        return exe
         # Se o "cmd" já for um .exe conhecido, tenta localizar diretamente.
         if cmd.lower().endswith(".exe"):
-            candidates.append(cmd)
-
-        for p in candidates:
-            try:
-                if p and os.path.isfile(p):
-                    return True
-            except Exception:
-                continue
+            if os.path.isfile(cmd):
+                return cmd
 
     for base in EXTRA_PATHS:
         if not os.path.exists(base):
@@ -135,6 +134,8 @@ def detect_ides():
         if _is_command_available(cmd) or _find_in_extra_paths(cmd):
             ides.append(name)
             seen.add(name)
+    if platform.system() == "Windows" and not ides:
+        print("[Aviso] Nenhuma IDE detectada automaticamente no Windows. Adicione ao PATH ou instale em local padrão.")
     return ides if ides else ["None found"]
 
 

@@ -33,8 +33,10 @@ def apply_preset(preset_data):
                     stderr=subprocess.DEVNULL,
                 )
                 results["ide"] = True
-            except Exception:
-                pass
+            except Exception as e:
+                print(f"[Aviso] Não foi possível abrir a IDE '{ide_name}': {e}")
+        else:
+            print(f"[Aviso] Caminho da IDE '{ide_name}' não encontrado. Verifique se está instalada e no PATH.")
 
     # Abre a playlist / app de música
     if playlist:
