@@ -140,5 +140,16 @@ def detect_ides():
 
 
 def get_ide_command(ide_name):
-    """Retorna o comando executável para uma IDE pelo nome de exibição."""
-    return IDE_NAME_TO_CMD.get(ide_name)
+    """Retorna o caminho completo do executável para uma IDE, se encontrado, ou o comando se estiver no PATH."""
+    cmd = IDE_NAME_TO_CMD.get(ide_name)
+    if not cmd:
+        return None
+    # Se estiver no PATH, retorna só o comando
+    if _is_command_available(cmd):
+        return cmd
+    # Se encontrar em caminhos alternativos, retorna o caminho completo
+    found = _find_in_extra_paths(cmd)
+    if isinstance(found, str):
+        return found
+    # Se não encontrou, retorna o comando (pode falhar)
+    return cmd

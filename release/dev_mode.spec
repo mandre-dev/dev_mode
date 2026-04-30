@@ -1,12 +1,12 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 a = Analysis(
-    ['src/dev_mode/__main__.py'],
-    pathex=['src'],
+    ['../src/dev_mode/__main__.py'],
+    pathex=['../src'],
     binaries=[],
     datas=[
-        ('src/dev_mode/assets', 'assets'),
-        ('src/dev_mode/fonts', 'fonts'),
+        ('../src/dev_mode/assets', 'assets'),
+        ('../src/dev_mode/fonts', 'fonts'),
     ],
     hiddenimports=['PIL', 'PIL.Image', 'PIL.ImageDraw', 'PIL.ImageFont', 'dev_mode', 'dev_mode.app'],
     hookspath=[],
